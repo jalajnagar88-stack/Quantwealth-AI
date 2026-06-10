@@ -1,0 +1,148 @@
+.reasoning-container {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 24px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.reasoning-container h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.reasoning-card {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  border: 1px solid rgba(16, 185, 129, 0.1);
+  padding: 1.5rem;
+}
+
+.signal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.signal-badge {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.signal-badge.buy {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #000000;
+}
+
+.confidence-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.confidence-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.confidence-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.reasoning-chain {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.reasoning-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #000000;
+  flex-shrink: 0;
+}
+
+.step-content {
+  min-width: 150px;
+}
+
+.step-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.step-status {
+  font-size: 11px;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.step-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.step-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 800ms ease;
+}
+
+.step-score {
+  min-width: 45px;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.reasoning-footer {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.final-decision {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.final-decision span {
+  color: var(--text-secondary);
+}
+
+.final-decision strong {
+  font-weight: 700;
+}
