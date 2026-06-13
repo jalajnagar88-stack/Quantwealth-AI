@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
+import Backtest from './components/Backtest';
 import { fetchMarketData, fetchSignals } from './services/api';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('dashboard');
   const [marketData, setMarketData] = useState({});
   const [signals, setSignals] = useState([]);
   const [portfolio] = useState({
@@ -17,16 +19,9 @@ function App() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        console.log('Fetching data from backend...');
-        
-        // Fetch market data
         const marketResults = await fetchMarketData(['RELIANCE', 'TCS', 'INFY', 'WIPRO']);
-        console.log('Market data:', marketResults);
         setMarketData(marketResults);
-
-        // Fetch signals
         const signalsData = await fetchSignals();
-        console.log('Signals:', signalsData);
         setSignals(signalsData);
       } catch (error) {
         console.error('Error loading data:', error);
@@ -40,12 +35,15 @@ function App() {
 
   return (
     <div className="app">
-      <Header portfolio={portfolio} />
-      <Dashboard 
-        portfolio={portfolio}
-        marketData={marketData}
-        signals={signals}
-      />
+      <Header portfolio={portfolio} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      
+      {currentPage === 'dashboard' && (
+        <Dashboard portfolio={portfolio} marketData={marketData} signals={signals} />
+      )}
+      
+      {currentPage === 'backtest' && (
+        <Backtest />
+      )}
     </div>
   );
 }

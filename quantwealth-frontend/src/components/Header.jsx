@@ -1,7 +1,7 @@
 import React from 'react';
 import './Header.css';
 
-function Header({ portfolio }) {
+function Header({ portfolio, currentPage, setCurrentPage }) {
   return (
     <header className="header">
       <div className="logo-section">
@@ -12,8 +12,20 @@ function Header({ portfolio }) {
         </div>
       </div>
       <nav className="nav">
-        <a href="#">Dashboard</a>
-        <a href="#">Signals</a>
+        <a 
+          href="#" 
+          onClick={(e) => { e.preventDefault(); setCurrentPage('dashboard'); }} 
+          className={currentPage === 'dashboard' ? 'active' : ''}
+        >
+          Dashboard
+        </a>
+        <a 
+          href="#" 
+          onClick={(e) => { e.preventDefault(); setCurrentPage('backtest'); }} 
+          className={currentPage === 'backtest' ? 'active' : ''}
+        >
+          Backtest
+        </a>
         <a href="#">Portfolio</a>
       </nav>
       <div className="header-stats">
