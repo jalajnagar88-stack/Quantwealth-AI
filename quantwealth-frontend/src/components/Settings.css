@@ -1,0 +1,70 @@
+.settings-page { padding: 28px; max-width: 760px; }
+.settings-header { margin-bottom: 28px; }
+.settings-header h1 { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+.settings-header p  { font-size: 14px; color: var(--text-tertiary); margin-top: 4px; }
+
+.settings-toast {
+  background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2);
+  color: var(--color-success); padding: 10px 16px; border-radius: var(--r-md);
+  font-size: 14px; font-weight: 500; margin-bottom: 20px;
+}
+
+.settings-grid { display: flex; flex-direction: column; gap: 16px; }
+
+.settings-card {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg); padding: 20px 24px; box-shadow: var(--shadow-card);
+}
+.settings-card.danger { border-color: rgba(220,38,38,0.2); }
+
+.settings-card-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 15px; font-weight: 600; color: var(--text-primary);
+  margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);
+}
+
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-bottom: 1px solid var(--border-subtle);
+}
+.settings-row:last-child { border-bottom: none; }
+
+.settings-row-label { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.settings-row-desc  { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* Toggle */
+.settings-toggle {
+  width: 44px; height: 24px; border-radius: 12px;
+  background: var(--border-default); border: none; cursor: pointer;
+  position: relative; transition: background var(--t-base); flex-shrink: 0;
+}
+.settings-toggle.on { background: var(--brand-primary); }
+.settings-toggle-knob {
+  position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; border-radius: 50%; background: white;
+  transition: left var(--t-base); box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.settings-toggle.on .settings-toggle-knob { left: 23px; }
+
+.settings-select {
+  padding: 7px 12px; border: 1px solid var(--border-default);
+  border-radius: var(--r-md); background: var(--bg-elevated);
+  color: var(--text-primary); font-size: 13px; cursor: pointer;
+}
+.settings-select:focus { outline: none; border-color: var(--brand-primary); }
+
+.settings-danger-btn {
+  padding: 7px 16px; border-radius: var(--r-md); border: 1px solid rgba(220,38,38,0.4);
+  background: rgba(220,38,38,0.06); color: var(--color-danger);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+}
+.settings-danger-btn:hover { background: rgba(220,38,38,0.12); }
+
+.settings-save-btn {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 24px; padding: 11px 24px;
+  background: var(--brand-gradient); color: white;
+  border: none; border-radius: var(--r-md);
+  font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.settings-save-btn:hover { opacity: 0.88; }

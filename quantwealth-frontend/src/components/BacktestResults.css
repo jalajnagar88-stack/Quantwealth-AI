@@ -118,3 +118,19 @@
 .trade-item.trade-sell .trade-pnl {
   color: #ef4444;
 }
+
+.meta-datasource {
+  font-weight: 600;
+}
+
+.meta-datasource.real {
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.meta-datasource.mock {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.08);
+}

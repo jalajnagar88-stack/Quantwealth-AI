@@ -1,7 +1,9 @@
 import express, { Router, Request, Response } from 'express';
 import { generateSignal, getSignalHistory } from '../controllers/signalController';
+import { authMiddleware } from '../middleware/auth';
 
 const router: Router = express.Router();
+router.use(authMiddleware);
 
 router.post('/generate', async (req: Request, res: Response) => {
   try {

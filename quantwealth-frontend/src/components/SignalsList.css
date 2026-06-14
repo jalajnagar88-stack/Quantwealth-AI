@@ -1,99 +1,283 @@
-.signals-container {
-  background: rgba(10, 10, 10, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(16, 185, 129, 0.15);
-  border-radius: 24px;
-  padding: 2rem;
-  margin-top: 2rem;
-}
-
-.signals-container h2 {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-}
-
-.signals-list {
+/* ── AI Signals Page ── */
+.sl-page {
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
-.signal-item {
+/* ── Header ── */
+.sl-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 16px;
-  border: 1px solid rgba(16, 185, 129, 0.1);
-  transition: all 300ms ease;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.signal-item:hover {
-  background: rgba(0, 0, 0, 0.5);
-  border-color: rgba(16, 185, 129, 0.3);
+.sl-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
 }
 
-.signal-left {
+.sl-subtitle {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.sl-header-right {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex: 1;
+  flex-wrap: wrap;
 }
 
-.signal-symbol {
-  width: 50px;
-  height: 50px;
-  background: rgba(10, 10, 10, 0.8);
-  border-radius: 8px;
+.sl-summary {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: var(--accent);
-  border: 0.5px solid rgba(16, 185, 129, 0.2);
-}
-
-.signal-name {
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-}
-
-.signal-analysis {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.signal-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
   gap: 8px;
 }
 
-.signal-badge {
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-weight: 700;
+.sl-sum-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
-  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  padding: 4px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-full);
 }
 
-.signal-badge.buy {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #000000;
+.sl-sum--buy  { color: var(--color-success); border-color: rgba(16,185,129,0.25); }
+.sl-sum--sell { color: var(--color-danger);  border-color: rgba(239,68,68,0.25); }
+
+.sl-gen-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--brand-gradient);
+  border: none;
+  border-radius: var(--r-full);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity var(--t-fast), transform var(--t-fast);
 }
 
-.signal-badge.sell {
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  color: #000000;
+.sl-gen-all-btn:hover:not(:disabled) { transform: translateY(-1px); }
+.sl-gen-all-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.sl-gen-all-btn--loading svg { animation: sl-spin 1s linear infinite; }
+
+/* ── Disclaimer ── */
+.sl-disclaimer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: var(--r-md);
+  font-size: 12px;
+  color: var(--color-warning);
 }
 
-.signal-confidence {
+/* ── Grid ── */
+.sl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+
+/* ── Card ── */
+.sl-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+.sl-card:hover { box-shadow: var(--shadow-card); }
+.sl-card--buy  { border-left: 3px solid var(--color-success); }
+.sl-card--sell { border-left: 3px solid var(--color-danger); }
+.sl-card--skip { border-left: 3px solid var(--color-warning); }
+
+.sl-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sl-symbol-badge {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--brand-primary);
+  letter-spacing: 0.02em;
+}
+
+.sl-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sl-card-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sl-card-sector {
   font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+  display: block;
+}
+
+.sl-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.sl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sl-badge--buy  { background: rgba(16,185,129,0.12); color: var(--color-success); }
+.sl-badge--sell { background: rgba(239,68,68,0.12);  color: var(--color-danger); }
+.sl-badge--skip { background: rgba(245,158,11,0.12); color: var(--color-warning); }
+
+.sl-conf-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.sl-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-sm);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--t-fast);
+}
+.sl-expand-btn:hover { border-color: var(--border-brand); color: var(--brand-primary); }
+
+/* ── Generate button on card ── */
+.sl-gen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  background: var(--bg-active);
+  border: 1px solid var(--border-brand);
+  border-radius: var(--r-full);
+  color: var(--brand-primary);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sl-gen-btn:hover:not(:disabled) { background: var(--brand-gradient); color: #fff; border-color: transparent; }
+.sl-gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Confidence bar ── */
+.sl-conf-bar-wrap {
+  height: 3px;
+  background: var(--bg-elevated);
+  border-radius: 99px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.sl-conf-bar {
+  height: 100%;
+  background: var(--brand-gradient);
+  border-radius: 99px;
+  transition: width 0.5s ease;
+}
+
+/* ── Reasoning ── */
+.sl-reasoning {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--bg-elevated);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.sl-reasoning svg { flex-shrink: 0; color: var(--brand-primary); margin-top: 2px; }
+
+.sl-reasoning p {
+  font-size: 12px;
   color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Error on card ── */
+.sl-card-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--color-danger);
+}
+
+/* ── Spinner ── */
+@keyframes sl-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.sl-spin { animation: sl-spin 0.8s linear infinite; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .sl-page { padding: 12px; }
+  .sl-grid { grid-template-columns: 1fr; }
+  .sl-header { flex-direction: column; align-items: flex-start; }
 }

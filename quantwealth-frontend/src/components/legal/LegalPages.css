@@ -1,0 +1,259 @@
+/* Legal Pages Styles */
+.legal-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0f0f2d 100%);
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.legal-nav {
+  padding: 24px 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8b8b9e;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: white;
+}
+
+.legal-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px;
+}
+
+/* Header */
+.legal-header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legal-icon {
+  color: #667eea;
+  margin-bottom: 24px;
+}
+
+.legal-icon.warning {
+  color: #f59e0b;
+}
+
+.legal-header h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.legal-header p {
+  font-size: 18px;
+  color: #8b8b9e;
+}
+
+/* Body Content */
+.legal-body {
+  line-height: 1.8;
+}
+
+.legal-body section {
+  margin-bottom: 48px;
+}
+
+.legal-body h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.legal-body h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 32px 0 16px 0;
+  color: #b4b4c7;
+}
+
+.legal-body p {
+  font-size: 16px;
+  color: #b4b4c7;
+  margin-bottom: 16px;
+}
+
+.legal-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+.legal-body li {
+  font-size: 16px;
+  color: #b4b4c7;
+  padding: 12px 0 12px 32px;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.legal-body li:last-child {
+  border-bottom: none;
+}
+
+.legal-body li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 22px;
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+}
+
+.legal-body strong {
+  color: white;
+  font-weight: 600;
+}
+
+/* Highlight Boxes */
+.highlight-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+}
+
+.highlight-box.info {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.highlight-box.info svg {
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+.highlight-box.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.highlight-box.warning svg {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.highlight-box.danger {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.highlight-box.danger svg {
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+.highlight-box h3 {
+  margin: 0 0 8px 0;
+  color: white;
+}
+
+.highlight-box p {
+  margin: 0;
+  color: #e0e0e8;
+}
+
+/* Contact Info */
+.contact-info {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 16px;
+}
+
+.contact-info p {
+  margin-bottom: 8px;
+}
+
+.contact-info p:last-child {
+  margin-bottom: 0;
+}
+
+/* Footer */
+.legal-footer {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.legal-footer > p {
+  font-size: 16px;
+  color: #8b8b9e;
+  margin-bottom: 24px;
+}
+
+.legal-links {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.legal-links a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.legal-links a:hover {
+  color: #764ba2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .legal-nav {
+    padding: 16px 24px;
+  }
+
+  .legal-content {
+    padding: 40px 24px;
+  }
+
+  .legal-header h1 {
+    font-size: 32px;
+  }
+
+  .legal-body h2 {
+    font-size: 22px;
+  }
+
+  .legal-body h3 {
+    font-size: 18px;
+  }
+
+  .highlight-box {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .legal-links {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
