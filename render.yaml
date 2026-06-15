@@ -29,3 +29,14 @@ services:
         value: QuantWealth AI <onboarding@resend.dev>
       - key: PYTHON_ENGINE_URL
         sync: false
+
+  - type: web
+    name: quantwealth-python-engine
+    runtime: python
+    rootDir: backtest-engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
