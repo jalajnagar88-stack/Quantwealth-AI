@@ -22,7 +22,7 @@ async function runWithPythonEngine(symbol: string, years: number, strategy: stri
     years,
     strategy: pyStrategy,
     initial_capital: initialCapital,
-  }, { timeout: 60000 }); // 60s — real data fetch + compute
+  }, { timeout: 25000 }); // 25s — must finish before Vercel's 30s limit
   const d = response.data;
   // Normalise Python response to match Node.js BacktestService shape
   return {

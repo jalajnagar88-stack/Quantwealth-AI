@@ -63,8 +63,11 @@ app.use('/api/auth/', authLimiter);
 app.use('/api/backtest/run', backtestLimiter);
 app.use('/api/', apiLimiter);
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB on each request (serverless-safe)
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
