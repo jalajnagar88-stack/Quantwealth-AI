@@ -93,45 +93,19 @@ app.use(notFoundHandler);
 // Global Error Handler
 app.use(globalErrorHandler);
 
-// Start server
-app.listen(Number(PORT), HOST, () => {
-  console.log('\n🚀 QuantWealth AI Backend Started');
-  console.log(`📍 Server: http://localhost:${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log('\n✅ Available Routes:');
-  console.log('  AUTH ROUTES:');
-  console.log('    POST /api/auth/register - Register new user');
-  console.log('    POST /api/auth/login - User login');
-  console.log('    POST /api/auth/verify-otp - Verify OTP');
-  console.log('    POST /api/auth/resend-otp - Resend OTP');
-  console.log('    GET  /api/auth/profile - Get user profile');
-  console.log('    PUT  /api/auth/profile - Update profile');
-  console.log('  NEWS ROUTES:');
-  console.log('    GET  /api/news - Get all news articles');
-  console.log('    GET  /api/news/categories - Get news categories');
-  console.log('    GET  /api/news/stock/:symbol - Get news for specific stock');
-  console.log('    POST /api/news/refresh - Refresh news (admin)');
-  console.log('  BACKTEST ROUTES:');
-  console.log('    POST /api/backtest/run - Run backtest simulation');
-  console.log('    GET  /api/backtest/history - Get backtest history');
-  console.log('    GET  /api/backtest/stats - Get backtest statistics');
-  console.log('    GET  /api/backtest/:id - Get backtest details');
-  console.log('    DELETE /api/backtest/:id - Delete backtest');
-  console.log('  SIGNALS ROUTES:');
-  console.log('    POST /api/signals/generate - Generate trading signal');
-  console.log('    GET  /api/signals/history/:symbol - Signal history');
-  console.log('  TRADE BRIEF ROUTES:');
-  console.log('    POST /api/trade-brief - Generate AI trade brief');
-  console.log('  MARKET ROUTES:');
-  console.log('    POST /api/market/ingest - Ingest market data');
-  console.log('    GET  /api/market/snapshot/:symbol - Market snapshot');
-  console.log('    GET  /api/market/history/:symbol - Market history');
-  console.log('    GET  /api/market/candles/:symbol - Candlestick data');
-  console.log('\n✅ MongoDB connected successfully\n');
-});
+// Export app for Vercel serverless
+export default app;
+
+// Start server in non-serverless environments
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(Number(PORT), HOST, () => {
+    console.log('\n🚀 QuantWealth AI Backend Started');
+    console.log(`📍 Server: http://localhost:${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+}
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('\n⚠️ SIGTERM received, shutting down gracefully...');
   process.exit(0);
 });
