@@ -13,7 +13,7 @@ import tradeBriefRoutes from './routes/tradeBrief';
 import watchlistRoutes from './routes/watchlist';
 import alertRoutes from './routes/alerts';
 import portfolioRoutes from './routes/portfolio';
-import { apiLimiter, authLimiter, backtestLimiter, publicRouteLimiter } from './middleware/rateLimiter';
+import { apiLimiter, authLimiter, backtestLimiter } from './middleware/rateLimiter';
 import { globalErrorHandler, notFoundHandler } from './middleware/errorHandler';
 
 dotenv.config();
