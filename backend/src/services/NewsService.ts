@@ -1,9 +1,8 @@
 import axios from 'axios';
-import cron from 'node-cron';
 
 // Cache for news articles
 let newsCache: NewsArticle[] = [];
-let lastUpdated: Date = new Date();
+let lastUpdated: Date = new Date(0);
 
 export interface NewsArticle {
   id: string;
@@ -18,31 +17,38 @@ export interface NewsArticle {
   imageUrl?: string;
 }
 
-// NewsAPI free tier: 100 req/day — single combined query to preserve quota
-const COMBINED_QUERY = 'Sensex OR Nifty OR NSE OR RBI OR Reliance OR TCS OR Infosys OR HDFC';
-
-const NEWS_API_KEY = process.env.NEWS_API_KEY || '';
-const NEWS_API_URL = 'https://newsapi.org/v2/everything';
+// Free RSS feeds from Indian financial news — no API key required
+const RSS_FEEDS = [
+  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms', source: 'Economic Times' },
+  { url: 'https://www.moneycontrol.com/rss/MCtopnews.xml', source: 'MoneyControl' },
+  { url: 'https://www.livemint.com/rss/markets', source: 'LiveMint' },
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest', source: 'NDTV Profit' },
+];
 
 class NewsService {
-  constructor() {
-    this.scheduleNewsRefresh();
-    // Delay initial fetch so server fully starts before hitting API
-    setTimeout(() => this.fetchAllNews(), 3000);
-  }
-
-  private scheduleNewsRefresh() {
-    cron.schedule('0 */6 * * *', async () => {
-      console.log('🔄 Refreshing news...');
-      await this.fetchAllNews();
-    });
-  }
+  constructor() {}
 
   async fetchAllNews(): Promise<NewsArticle[]> {
     try {
-      const articles = await this.fetchFromNewsAPI(COMBINED_QUERY);
+      const allArticles: NewsArticle[] = [];
+      await Promise.allSettled(
+        RSS_FEEDS.map(async (feed, feedIndex) => {
+          try {
+            const articles = await this.fetchRSS(feed.url, feed.source, feedIndex);
+            allArticles.push(...articles);
+          } catch (e) {
+            console.warn(`RSS fetch failed for ${feed.source}`);
+          }
+        })
+      );
+
+      if (allArticles.length === 0) {
+        console.warn('⚠️  All RSS feeds failed — returning cached news');
+        return newsCache;
+      }
+
       const uniqueArticles = this.removeDuplicates(
-        articles.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
+        allArticles.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime())
       );
       newsCache = uniqueArticles.slice(0, 60);
       lastUpdated = new Date();
@@ -54,55 +60,39 @@ class NewsService {
     }
   }
 
-  private async fetchFromNewsAPI(query: string): Promise<NewsArticle[]> {
-    if (!NEWS_API_KEY) {
-      console.log('⚠️  NEWS_API_KEY not set — skipping news fetch');
-      return [];
-    }
+  private async fetchRSS(url: string, source: string, feedIndex: number): Promise<NewsArticle[]> {
+    const response = await axios.get(url, {
+      timeout: 10000,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; QuantWealthBot/1.0)' }
+    });
+    const xml = response.data as string;
+    const items = xml.match(/<item>([\s\S]*?)<\/item>/g) || [];
 
-    try {
-      const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // last 7 days
-      const response = await axios.get(NEWS_API_URL, {
-        params: { q: query, language: 'en', sortBy: 'publishedAt', pageSize: 50, apiKey: NEWS_API_KEY, from },
-        timeout: 12000
-      });
+    return items.slice(0, 15).map((item, i) => {
+      const title = this.extractXML(item, 'title');
+      const description = this.extractXML(item, 'description').replace(/<[^>]*>/g, '').trim();
+      const link = this.extractXML(item, 'link');
+      const pubDate = this.extractXML(item, 'pubDate');
+      const imageMatch = item.match(/url="([^"]+\.(jpg|jpeg|png|webp))"/i);
 
-      if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || 'NewsAPI error');
-      }
-
-      return response.data.articles
-        .filter((a: any) => a.title && a.title !== '[Removed]')
-        .map((article: any, index: number) => this.transformArticle(article, `na-${index}`));
-    } catch (error: any) {
-      const msg = error?.response?.data?.message || error.message;
-      console.error('NewsAPI error:', msg);
-      return [];
-    }
+      return {
+        id: `${feedIndex}-${i}`,
+        title,
+        description: description.slice(0, 300),
+        source,
+        publishedAt: pubDate ? new Date(pubDate) : new Date(),
+        url: link,
+        sentiment: this.analyzeSentiment(title + ' ' + description),
+        category: this.categorizeArticle(title),
+        relatedStocks: this.extractStockSymbols(title + ' ' + description),
+        imageUrl: imageMatch?.[1],
+      };
+    }).filter(a => a.title && a.title.length > 5);
   }
 
-  private transformArticle(article: any, id: string): NewsArticle {
-    // Analyze sentiment based on title keywords
-    const sentiment = this.analyzeSentiment(article.title + ' ' + article.description);
-    
-    // Determine category
-    const category = this.categorizeArticle(article.title);
-    
-    // Extract related stocks
-    const relatedStocks = this.extractStockSymbols(article.title + ' ' + article.description);
-
-    return {
-      id,
-      title: article.title,
-      description: article.description || '',
-      source: article.source?.name || 'Unknown',
-      publishedAt: new Date(article.publishedAt),
-      url: article.url,
-      sentiment,
-      category,
-      relatedStocks,
-      imageUrl: article.urlToImage
-    };
+  private extractXML(xml: string, tag: string): string {
+    const match = xml.match(new RegExp(`<${tag}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, 'i'));
+    return match?.[1]?.trim() || '';
   }
 
   private analyzeSentiment(text: string): 'positive' | 'negative' | 'neutral' {

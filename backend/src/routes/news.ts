@@ -13,6 +13,10 @@ router.get('/', async (req: Request, res: Response) => {
     const { category, search, limit = 20 } = req.query;
     
     let news = newsService.getCachedNews();
+    // Auto-fetch on cold start if cache is empty
+    if (news.length === 0) {
+      news = await newsService.fetchAllNews();
+    }
     
     // Filter by category
     if (category && category !== 'all') {
