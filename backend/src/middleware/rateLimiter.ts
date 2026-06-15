@@ -11,6 +11,7 @@ export const apiLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false },
   handler: (req: Request, res: Response) => {
     res.status(429).json({
       success: false,
@@ -29,6 +30,7 @@ export const authLimiter = rateLimit({
     message: 'Too many authentication attempts, please try again after 15 minutes'
   },
   skipSuccessfulRequests: true, // Don't count successful requests
+  validate: { trustProxy: false },
   handler: (req: Request, res: Response) => {
     res.status(429).json({
       success: false,
@@ -46,6 +48,7 @@ export const backtestLimiter = rateLimit({
     success: false,
     message: 'Backtest limit reached. Please try again later or upgrade your plan.'
   },
+  validate: { trustProxy: false },
   handler: (req: Request, res: Response) => {
     res.status(429).json({
       success: false,
