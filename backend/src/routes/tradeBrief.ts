@@ -89,28 +89,35 @@ async function scanStock(symbol: string): Promise<ScanResult | null> {
     let target = 0;
 
     // RSI oversold bounce
-    if (rsi < 35 && lastClose > sma50 * 0.95) {
+    if (rsi < 40 && lastClose > sma50 * 0.9) {
       setup_name = 'RSI Oversold Bounce';
       stop_loss = lastClose - atr * 1.5;
       target = lastClose + atr * 3;
       conviction = rsi < 30 ? 'HIGH' : 'MEDIUM';
     }
     // Pullback to 20-SMA in uptrend
-    else if (lastClose > sma50 && Math.abs(lastClose - sma20) / sma20 < 0.015 && sma20 > sma50) {
+    else if (lastClose > sma50 && Math.abs(lastClose - sma20) / sma20 < 0.03 && sma20 > sma50) {
       setup_name = 'SMA20 Pullback (Uptrend)';
       stop_loss = sma20 - atr;
       target = lastClose + atr * 2.5;
       conviction = 'HIGH';
     }
-    // Breakout: close above 50-day high
-    else if (lastClose >= Math.max(...closes.slice(-50, -1))) {
-      setup_name = '50-Day Breakout';
-      stop_loss = lastClose - atr * 2;
-      target = lastClose + atr * 3;
+    // Momentum: price above both SMAs, uptrend
+    else if (lastClose > sma20 && sma20 > sma50 && rsi > 50 && rsi < 70) {
+      setup_name = 'Momentum Continuation';
+      stop_loss = sma20 - atr * 0.5;
+      target = lastClose + atr * 2;
+      conviction = 'MEDIUM';
+    }
+    // Breakout: close above 20-day high (relaxed from 50)
+    else if (closes.length > 20 && lastClose >= Math.max(...closes.slice(-21, -1))) {
+      setup_name = '20-Day Breakout';
+      stop_loss = lastClose - atr * 1.5;
+      target = lastClose + atr * 2.5;
       conviction = 'HIGH';
     }
-    // Bearish RSI overbought
-    else if (rsi > 70 && lastClose < sma20) {
+    // RSI overbought reversal
+    else if (rsi > 65 && lastClose < sma20) {
       setup_name = 'RSI Overbought Reversal';
       entry = lastClose;
       stop_loss = lastClose + atr * 1.5;
@@ -124,7 +131,7 @@ async function scanStock(symbol: string): Promise<ScanResult | null> {
     const risk = Math.abs(entry - stop_loss);
     const reward = Math.abs(target - entry);
     const rr = risk > 0 ? parseFloat((reward / risk).toFixed(1)) : 0;
-    if (rr < 1.5) return null; // Only show setups with R:R >= 1.5
+    if (rr < 1.2) return null; // Show setups with R:R >= 1.2
 
     return {
       symbol,

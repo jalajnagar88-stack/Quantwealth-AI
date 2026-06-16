@@ -1,5 +1,8 @@
 import yahooFinance from 'yahoo-finance2';
 
+// Suppress yahoo-finance2 strict validation
+try { (yahooFinance as any).setGlobalConfig({ validation: { logErrors: false } }); } catch {}
+
 interface Candle {
   date: Date;
   open: number;
@@ -46,17 +49,42 @@ async function fetchHistoricalData(symbol: string, years: number): Promise<Candl
   const startDate = new Date();
   startDate.setFullYear(startDate.getFullYear() - years);
 
-  const result: any = await yahooFinance.chart(yahooSymbol, {
+  // Try chart API first
+  try {
+    const result: any = await yahooFinance.chart(yahooSymbol, {
+      period1: startDate,
+      period2: endDate,
+      interval: '1d',
+    });
+
+    if (result?.quotes?.length > 0) {
+      return result.quotes
+        .filter((q: any) => q.close != null && q.open != null)
+        .map((q: any) => ({
+          date: new Date(q.date),
+          open: q.open,
+          high: q.high,
+          low: q.low,
+          close: q.close,
+          volume: q.volume || 0,
+        }));
+    }
+  } catch (chartErr: any) {
+    console.warn(`Chart API failed for ${yahooSymbol}: ${chartErr.message}, trying historical...`);
+  }
+
+  // Fallback: historical API
+  const result: any = await (yahooFinance as any).historical(yahooSymbol, {
     period1: startDate,
     period2: endDate,
     interval: '1d',
   });
 
-  if (!result?.quotes || result.quotes.length === 0) {
+  if (!result || result.length === 0) {
     throw new Error(`No data found for ${yahooSymbol}`);
   }
 
-  return result.quotes
+  return result
     .filter((q: any) => q.close != null && q.open != null)
     .map((q: any) => ({
       date: new Date(q.date),

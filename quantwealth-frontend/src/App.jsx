@@ -130,6 +130,7 @@ function App() {
           } />
 
           <Route path="/backtest" element={<Navigate to="/strategy-simulator" replace />} />
+          <Route path="/signals" element={<Navigate to="/ai-signals" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
