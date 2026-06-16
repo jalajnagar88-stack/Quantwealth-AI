@@ -88,40 +88,39 @@ async function scanStock(symbol: string): Promise<ScanResult | null> {
     let stop_loss = 0;
     let target = 0;
 
-    // RSI oversold bounce
-    if (rsi < 40 && lastClose > sma50 * 0.9) {
+    // 1. RSI oversold bounce (very lenient)
+    if (rsi < 50 && lastClose > sma50 * 0.85) {
       setup_name = 'RSI Oversold Bounce';
       stop_loss = lastClose - atr * 1.5;
-      target = lastClose + atr * 3;
-      conviction = rsi < 30 ? 'HIGH' : 'MEDIUM';
-    }
-    // Pullback to 20-SMA in uptrend
-    else if (lastClose > sma50 && Math.abs(lastClose - sma20) / sma20 < 0.03 && sma20 > sma50) {
-      setup_name = 'SMA20 Pullback (Uptrend)';
-      stop_loss = sma20 - atr;
       target = lastClose + atr * 2.5;
-      conviction = 'HIGH';
+      conviction = rsi < 35 ? 'HIGH' : 'MEDIUM';
     }
-    // Momentum: price above both SMAs, uptrend
-    else if (lastClose > sma20 && sma20 > sma50 && rsi > 50 && rsi < 70) {
-      setup_name = 'Momentum Continuation';
-      stop_loss = sma20 - atr * 0.5;
+    // 2. Simple uptrend (price above 50-SMA)
+    else if (lastClose > sma50 && lastClose > sma20 * 0.95) {
+      setup_name = 'Uptrend Momentum';
+      stop_loss = Math.min(sma20 - atr, lastClose * 0.97);
       target = lastClose + atr * 2;
       conviction = 'MEDIUM';
     }
-    // Breakout: close above 20-day high (relaxed from 50)
-    else if (closes.length > 20 && lastClose >= Math.max(...closes.slice(-21, -1))) {
-      setup_name = '20-Day Breakout';
-      stop_loss = lastClose - atr * 1.5;
-      target = lastClose + atr * 2.5;
-      conviction = 'HIGH';
+    // 3. Near support (within 5% of 20-SMA)
+    else if (Math.abs(lastClose - sma20) / sma20 < 0.05 && lastClose > sma50 * 0.9) {
+      setup_name = 'Support Bounce';
+      stop_loss = sma50 - atr;
+      target = lastClose + atr * 2;
+      conviction = 'MEDIUM';
     }
-    // RSI overbought reversal
-    else if (rsi > 65 && lastClose < sma20) {
-      setup_name = 'RSI Overbought Reversal';
-      entry = lastClose;
-      stop_loss = lastClose + atr * 1.5;
-      target = lastClose - atr * 2.5;
+    // 4. Trend continuation (above both MAs)
+    else if (lastClose > sma20 && sma20 > sma50 * 0.98) {
+      setup_name = 'Trend Continuation';
+      stop_loss = sma20 - atr * 0.8;
+      target = lastClose + atr * 2.2;
+      conviction = rsi > 40 && rsi < 70 ? 'HIGH' : 'MEDIUM';
+    }
+    // 5. Mean reversion (RSI extreme with price above long-term avg)
+    else if (rsi < 45 && lastClose > sma50) {
+      setup_name = 'Mean Reversion';
+      stop_loss = lastClose - atr * 1.2;
+      target = lastClose + atr * 2;
       conviction = 'MEDIUM';
     }
     else {
@@ -131,7 +130,7 @@ async function scanStock(symbol: string): Promise<ScanResult | null> {
     const risk = Math.abs(entry - stop_loss);
     const reward = Math.abs(target - entry);
     const rr = risk > 0 ? parseFloat((reward / risk).toFixed(1)) : 0;
-    if (rr < 1.2) return null; // Show setups with R:R >= 1.2
+    if (rr < 1.0) return null; // Show setups with R:R >= 1.0
 
     return {
       symbol,
