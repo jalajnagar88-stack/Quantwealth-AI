@@ -226,31 +226,31 @@
 
 .input-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .input-icon {
   position: absolute;
-  left: 12px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
-  display: flex;
-  align-items: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 11px 14px 11px 44px;
+  padding: 11px 14px 11px 40px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-md);
   color: var(--text-primary);
   font-size: 14px;
   font-family: inherit;
+  box-sizing: border-box;
   transition: border-color var(--t-fast), box-shadow var(--t-fast);
 }
 
