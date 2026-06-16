@@ -1,9 +1,13 @@
 import express, { Router, Request, Response } from 'express';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import axios from 'axios';
 import { authMiddleware } from '../middleware/auth';
 
 const router: Router = express.Router();
 router.use(authMiddleware);
+
+const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
+const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
+const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
 
 const SYSTEM_PROMPT = `You are QuantWealth AI, an expert trading assistant specialised in the Indian stock market (NSE/BSE). You have deep knowledge of:
 - Indian equities: Nifty 50, Sensex, sectoral indices
@@ -28,42 +32,54 @@ router.post('/', async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'Message is required' });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || apiKey === 'your-gemini-api-key') {
+    if (!VIRTUALS_API_KEY) {
       return res.status(200).json({
         success: true,
         data: {
-          reply: `I'm QuantWealth AI. To enable real AI responses, add your **Google Gemini API key** to \`backend/.env\`:\n\n\`GEMINI_API_KEY=your-key-here\`\n\nGet a free key at: https://aistudio.google.com/apikey`,
+          reply: `I'm QuantWealth AI. To enable AI responses, set **VIRTUALS_API_KEY** in your environment variables.`,
           model: 'fallback'
         }
       });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      systemInstruction: SYSTEM_PROMPT,
+    // Build OpenAI-compatible messages array
+    const messages: Array<{ role: string; content: string }> = [
+      { role: 'system', content: SYSTEM_PROMPT },
+    ];
+
+    // Add conversation history (max last 10 turns)
+    history.slice(-10).forEach((h: { role: string; content: string }) => {
+      messages.push({ role: h.role === 'assistant' ? 'assistant' : 'user', content: h.content });
     });
 
-    // Build Gemini chat history (max last 10 turns, exclude the current message)
-    const chatHistory = history.slice(-10).map((h: { role: string; content: string }) => ({
-      role: h.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: h.content }],
-    }));
+    // Add current user message
+    messages.push({ role: 'user', content: message });
 
-    const chat = model.startChat({ history: chatHistory });
-    const result = await chat.sendMessage(message);
-    const reply = result.response.text();
+    const response = await axios.post(`${VIRTUALS_BASE_URL}/chat/completions`, {
+      model: VIRTUALS_MODEL,
+      messages,
+      max_tokens: 1024,
+      temperature: 0.7,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${VIRTUALS_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      timeout: 25000,
+    });
+
+    const reply = response.data?.choices?.[0]?.message?.content || 'No response generated.';
 
     res.status(200).json({
       success: true,
-      data: { reply, model: 'gemini-1.5-flash' }
+      data: { reply, model: VIRTUALS_MODEL }
     });
   } catch (error: any) {
-    console.error('Chat error:', error?.message || error);
+    const errMsg = error?.response?.data?.error?.message || error?.message || 'Failed to get AI response';
+    console.error('Chat error:', errMsg);
     res.status(500).json({
       success: false,
-      message: error?.message || 'Failed to get AI response'
+      message: errMsg
     });
   }
 });
