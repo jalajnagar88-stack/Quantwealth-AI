@@ -1,45 +1,10 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import axios from 'axios';
 import Backtest from '../models/Backtest';
 import { BacktestService } from '../services/BacktestService';
+import { runRealBacktest } from '../services/RealBacktestEngine';
 
 const backtestService = new BacktestService();
-const PYTHON_ENGINE_URL = process.env.PYTHON_ENGINE_URL || 'http://localhost:8000';
-
-// Map frontend strategy names to Python engine names
-const STRATEGY_MAP: Record<string, string> = {
-  'RSI':        'RSI',
-  'MACD':       'MACD',
-  'MOVING_AVG': 'MA_CROSSOVER',
-  'BREAKOUT':   'BREAKOUT',
-};
-
-async function runWithPythonEngine(symbol: string, years: number, strategy: string, initialCapital: number) {
-  const pyStrategy = STRATEGY_MAP[strategy] || strategy;
-  const response = await axios.post(`${PYTHON_ENGINE_URL}/backtest`, {
-    symbol,
-    years,
-    strategy: pyStrategy,
-    initial_capital: initialCapital,
-  }, { timeout: 25000 }); // 25s — must finish before Vercel's 30s limit
-  const d = response.data;
-  // Normalise Python response to match Node.js BacktestService shape
-  return {
-    winRate:      d.win_rate,
-    totalProfit:  d.total_profit,
-    totalLoss:    d.total_loss,
-    totalTrades:  d.total_trades,
-    sharpeRatio:  d.sharpe_ratio,
-    maxDrawdown:  d.max_drawdown,
-    equityCurve:  d.equity_curve,
-    trades:       d.trades,
-    finalCapital: d.final_capital,
-    dataSource:   d.data_source,
-    candlesUsed:  d.candles_used,
-    _fromPython:  true,
-  };
-}
 
 // Run a new backtest
 export const runBacktest = async (req: Request, res: Response) => {
@@ -62,15 +27,15 @@ export const runBacktest = async (req: Request, res: Response) => {
 
     const { symbol, stockName, strategy, years, initialCapital } = req.body;
 
-    // Try Python engine first (real NSE data), fall back to Node.js mock
+    // Try real NSE data engine first, fall back to mock if Yahoo Finance fails
     let results: any;
     let engineUsed = 'mock';
     try {
-      results    = await runWithPythonEngine(symbol, years, strategy, initialCapital);
-      engineUsed = 'python';
-      console.log(`✅ Python engine: ${symbol} ${strategy} (${results.candlesUsed} candles)`);
-    } catch (pyErr: any) {
-      console.warn(`⚠️  Python engine unavailable (${pyErr.message}) — falling back to mock engine`);
+      results = await runRealBacktest(symbol, years, strategy, initialCapital);
+      engineUsed = 'real';
+      console.log(`✅ Real engine: ${symbol} ${strategy} (${results.candlesUsed} candles)`);
+    } catch (realErr: any) {
+      console.warn(`⚠️  Real engine failed (${realErr.message}) — falling back to mock engine`);
       results = await backtestService.runBacktest(symbol, years, strategy, initialCapital);
     }
 
