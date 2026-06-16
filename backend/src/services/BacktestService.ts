@@ -86,10 +86,10 @@ export class BacktestService {
           break;
           
         case 'BREAKOUT':
-          const high20 = this.calculateHigh(candles, i, 20);
-          const low20 = this.calculateLow(candles, i, 20);
+          const high20 = this.calculateHigh(candles, i - 1, 20);
+          const low10 = this.calculateLow(candles, i - 1, 10);
           shouldBuy = candles[i].close > high20 && !inPosition;
-          shouldSell = candles[i].close < low20 && inPosition;
+          shouldSell = candles[i].close < low10 && inPosition;
           break;
           
         default:
@@ -243,7 +243,7 @@ export class BacktestService {
 
   private calculateHigh(candles: any[], index: number, period: number): number {
     if (index < period) return candles[index].high;
-    let high = candles[index - period].high;
+    let high = -Infinity;
     for (let i = index - period + 1; i <= index; i++) {
       if (candles[i].high > high) high = candles[i].high;
     }
@@ -252,7 +252,7 @@ export class BacktestService {
 
   private calculateLow(candles: any[], index: number, period: number): number {
     if (index < period) return candles[index].low;
-    let low = candles[index - period].low;
+    let low = Infinity;
     for (let i = index - period + 1; i <= index; i++) {
       if (candles[i].low < low) low = candles[i].low;
     }
