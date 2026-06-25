@@ -14,6 +14,7 @@ import watchlistRoutes from './routes/watchlist';
 import alertRoutes from './routes/alerts';
 import portfolioRoutes from './routes/portfolio';
 import paperTradingRoutes from './routes/paperTrading';
+import hacdIssuanceRoutes from './routes/hacdIssuance';
 import { apiLimiter, authLimiter, backtestLimiter } from './middleware/rateLimiter';
 import { globalErrorHandler, notFoundHandler } from './middleware/errorHandler';
 
@@ -92,6 +93,7 @@ app.use('/api/watchlist', watchlistRoutes);
 app.use('/api/alerts', alertRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/paper-trading', paperTradingRoutes);
+app.use('/api/hacd-issuance', hacdIssuanceRoutes);
 
 // 404 Handler
 app.use(notFoundHandler);
