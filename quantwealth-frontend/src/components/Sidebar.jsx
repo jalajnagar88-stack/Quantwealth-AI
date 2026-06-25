@@ -24,6 +24,7 @@ const Sidebar = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
   
+  // HACD Issuance link added for Incubator Cohort 2
   const navItems = [
     { path: '/dashboard',          icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/trade-brief',        icon: Briefcase,       label: 'Trade Brief', badge: 'NEW' },
