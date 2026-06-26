@@ -6,6 +6,7 @@ import { validateLaunchSpec } from '../services/HacdValidator';
 import { expandGoogleFormToIntake } from '../services/HacdIntakeExpander';
 import { scoreProject } from '../services/HacdProjectScorer';
 import { roastLaunchSpec } from '../services/HacdRoastMode';
+import { performWebResearch, researchHACPrice, researchRecentLaunches, researchCommunitySentiment } from '../services/HacdWebResearch';
 
 const router: Router = express.Router();
 router.use(authMiddleware);
@@ -297,6 +298,50 @@ router.post('/:id/roast', async (req: Request, res: Response) => {
     res.json({ success: true, data: roastResult });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message || 'Roast mode failed' });
+  }
+});
+
+// Web research
+router.post('/research', async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const { query } = req.body;
+    const result = await performWebResearch(query);
+    res.json({ success: true, data: result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message || 'Research failed' });
+  }
+});
+
+router.get('/research/hac-price', async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const result = await researchHACPrice();
+    res.json({ success: true, data: result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message || 'Research failed' });
+  }
+});
+
+router.get('/research/recent-launches', async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const result = await researchRecentLaunches();
+    res.json({ success: true, data: result });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message || 'Research failed' });
   }
 });
 
