@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "name": "QuantWealth Token",
+    "ticker": "QWT",
+    "category": "ai_agent",
+    "description": "AI-powered trading insights platform token for QuantWealth AI users. Provides access to premium AI trading signals, reduced backtest fees, and governance voting rights.",
+    "website": "https://quantwealth-ai.netlify.app",
+    "x": "@quantwealth",
+    "discord": "",
+    "telegram": "",
+    "contact": "team@quantwealth.ai"
+  },
+  "asset": {
+    "type": "FT",
+    "total_supply": 1000000,
+    "decimals": 18,
+    "unit_name": "tokens",
+    "utility_summary": "QWT powers the QuantWealth AI platform, giving holders access to premium signals, backtesting, and governance. Utility at launch includes reduced backtest fees and AI signal access. Roadmap includes staking rewards and cross-chain expansion.",
+    "utility_at_launch": "Access to premium AI trading signals, 50% discount on backtest fees, governance voting rights",
+    "utility_roadmap": "Q3 2026: Staking rewards program, Q4 2026: Cross-chain bridge to Ethereum, Q1 2027: DeFi integration"
+  },
+  "stack": {
+    "total_hacd_lots": 100,
+    "hacd_per_lot": 1,
+    "units_per_hacd_lot": 10000,
+    "stack_cost_hac_per_hacd": 50,
+    "network_fee_required": true,
+    "designated_address": "",
+    "first_phase_hacd_lots": 20,
+    "public_phase_hacd_lots": 80,
+    "removal_effect": "burn"
+  },
+  "launch": {
+    "target_date_utc": "2026-07-01",
+    "phase_model": "public",
+    "min_hacd_per_participant": 1,
+    "max_hacd_per_participant": null,
+    "status": "draft",
+    "launchpad_url": "hacd.it/launchpad"
+  },
+  "copy": {
+    "headline": "AI-Powered Trading Insights on HACD",
+    "subheadline": "The first Stack Token for quantitative trading intelligence",
+    "short_description": "QWT powers the QuantWealth AI platform, giving holders access to premium signals, backtesting, and governance",
+    "risk_disclosure": "This is an experimental token. Value may fluctuate. Not financial advice. Do your own research. Stack formation cost is a reference, not a guaranteed floor price."
+  },
+  "review": {
+    "validated": false,
+    "validated_at": null,
+    "validator_version": "1.0"
+  }
+}
