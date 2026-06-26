@@ -1,10 +1,6 @@
 import axios from 'axios';
 import { HACD_PROMPTS } from '../constants/HacdPrompts';
 
-const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
-const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
-const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
-
 export interface ResearchResult {
   query: string;
   findings: string;
@@ -14,6 +10,10 @@ export interface ResearchResult {
 
 // Web research mode for live HACD ecosystem data
 export async function performWebResearch(query: string): Promise<ResearchResult> {
+  const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
+  const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
+  const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
+  
   if (!VIRTUALS_API_KEY) {
     throw new Error('VIRTUALS_API_KEY not set');
   }

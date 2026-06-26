@@ -14,7 +14,7 @@ router.use(authMiddleware);
 // Create new launch spec (draft)
 router.post('/create', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -52,7 +52,7 @@ router.post('/create', async (req: Request, res: Response) => {
 // Get user's launch specs
 router.get('/list', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -67,7 +67,7 @@ router.get('/list', async (req: Request, res: Response) => {
 // Get single launch spec
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -86,7 +86,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Update launch spec
 router.put('/:id', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -110,7 +110,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 // Generate all 8 documents
 router.post('/:id/generate-all', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -138,7 +138,7 @@ router.post('/:id/generate-all', async (req: Request, res: Response) => {
 // Generate single document
 router.post('/:id/generate/:docType', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -167,7 +167,7 @@ router.post('/:id/generate/:docType', async (req: Request, res: Response) => {
 // Validate launch spec
 router.post('/:id/validate', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -197,7 +197,7 @@ router.post('/:id/validate', async (req: Request, res: Response) => {
 // Delete launch spec
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -216,7 +216,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
 // Export launch spec as JSON (for submission)
 router.get('/:id/export', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -248,7 +248,7 @@ router.get('/:id/export', async (req: Request, res: Response) => {
 // Expand Google Form answers to full intake form
 router.post('/expand-intake', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -264,7 +264,7 @@ router.post('/expand-intake', async (req: Request, res: Response) => {
 // Score project (5 criteria)
 router.post('/:id/score', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -284,7 +284,7 @@ router.post('/:id/score', async (req: Request, res: Response) => {
 // Roast mode (self-review)
 router.post('/:id/roast', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -304,7 +304,7 @@ router.post('/:id/roast', async (req: Request, res: Response) => {
 // Web research
 router.post('/research', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -319,7 +319,7 @@ router.post('/research', async (req: Request, res: Response) => {
 
 router.get('/research/hac-price', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -333,7 +333,7 @@ router.get('/research/hac-price', async (req: Request, res: Response) => {
 
 router.get('/research/recent-launches', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }

@@ -5,10 +5,6 @@ import { authMiddleware } from '../middleware/auth';
 const router: Router = express.Router();
 router.use(authMiddleware);
 
-const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
-const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
-const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
-
 const SYSTEM_PROMPT = `You are QuantWealth AI, an expert trading assistant specialised in the Indian stock market (NSE/BSE). You have deep knowledge of:
 - Indian equities: Nifty 50, Sensex, sectoral indices
 - Technical analysis: RSI, MACD, Bollinger Bands, Moving Averages, Volume analysis
@@ -31,6 +27,10 @@ router.post('/', async (req: Request, res: Response) => {
     if (!message?.trim()) {
       return res.status(400).json({ success: false, message: 'Message is required' });
     }
+
+    const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
+    const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
+    const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
 
     if (!VIRTUALS_API_KEY) {
       return res.status(200).json({

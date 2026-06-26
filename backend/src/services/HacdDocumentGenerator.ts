@@ -3,15 +3,15 @@ import { IHacdLaunchSpec, AssetType, ProjectCategory } from '../models/HacdLaunc
 import { getEcosystemContext } from '../constants/HacdEcosystem';
 import { HACD_PROMPTS } from '../constants/HacdPrompts';
 
-const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
-const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
-const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
-
 // HACD Ecosystem knowledge — from ECOSYSTEM.md (single source of truth)
 const HACD_ECOSYSTEM_CONTEXT = getEcosystemContext();
 
 // Generate a single document using Virtuals API
 async function generateDocument(prompt: string): Promise<string> {
+  const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
+  const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
+  const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
+  
   if (!VIRTUALS_API_KEY) {
     throw new Error('VIRTUALS_API_KEY not set');
   }

@@ -1,9 +1,5 @@
 import axios from 'axios';
 
-const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
-const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
-const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
-
 // Google Form answers (9 fields) → Full 40-field intake form
 export interface GoogleFormAnswers {
   project_name: string;
@@ -82,6 +78,10 @@ export interface IntakeForm {
 }
 
 export async function expandGoogleFormToIntake(answers: GoogleFormAnswers): Promise<IntakeForm> {
+  const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
+  const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
+  const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
+  
   if (!VIRTUALS_API_KEY) {
     throw new Error('VIRTUALS_API_KEY not set');
   }

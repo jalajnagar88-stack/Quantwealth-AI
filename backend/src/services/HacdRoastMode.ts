@@ -1,10 +1,6 @@
 import axios from 'axios';
 import { IHacdLaunchSpec } from '../models/HacdLaunchSpec';
 
-const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
-const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
-const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
-
 export interface RoastResult {
   issues: Array<{
     severity: 'critical' | 'high' | 'medium' | 'low';
@@ -18,6 +14,10 @@ export interface RoastResult {
 
 // Roast mode — self-review that finds every issue
 export async function roastLaunchSpec(spec: IHacdLaunchSpec): Promise<RoastResult> {
+  const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
+  const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
+  const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
+  
   if (!VIRTUALS_API_KEY) {
     throw new Error('VIRTUALS_API_KEY not set');
   }

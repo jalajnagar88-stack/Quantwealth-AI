@@ -1,7 +1,11 @@
+import dotenv from 'dotenv';
+
+// Load environment variables before any imports
+dotenv.config({ path: '.env' });
+
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
 import { connectDB } from './config/database';
 import signalRoutes from './routes/signals';
 import marketRoutes from './routes/market';
@@ -17,8 +21,6 @@ import paperTradingRoutes from './routes/paperTrading';
 import hacdIssuanceRoutes from './routes/hacdIssuance';
 import { apiLimiter, authLimiter, backtestLimiter } from './middleware/rateLimiter';
 import { globalErrorHandler, notFoundHandler } from './middleware/errorHandler';
-
-dotenv.config();
 
 const app: Express = express();
 const PORT = process.env.PORT || 3000;

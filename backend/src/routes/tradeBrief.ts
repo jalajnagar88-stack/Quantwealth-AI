@@ -6,10 +6,6 @@ import { authMiddleware } from '../middleware/auth';
 const router: Router = express.Router();
 router.use(authMiddleware);
 
-const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
-const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
-const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
-
 // Top liquid NSE stocks to scan
 const SCAN_UNIVERSE = [
   'RELIANCE','TCS','HDFCBANK','INFY','ICICIBANK','SBIN','BHARTIARTL','ITC',
@@ -153,6 +149,10 @@ async function scanStock(symbol: string): Promise<ScanResult | null> {
 }
 
 async function buildAIReasoning(setup: ScanResult, mode: string): Promise<string> {
+  const VIRTUALS_BASE_URL = process.env.VIRTUALS_BASE_URL || 'https://compute.virtuals.io/v1';
+  const VIRTUALS_API_KEY = process.env.VIRTUALS_API_KEY || '';
+  const VIRTUALS_MODEL = process.env.VIRTUALS_MODEL || 'gemini-3-flash-preview';
+  
   if (!VIRTUALS_API_KEY) {
     return `${setup.setup_name} detected on ${setup.symbol}. Entry ₹${setup.entry}, SL ₹${setup.stop_loss}, target ₹${setup.target}.`;
   }
