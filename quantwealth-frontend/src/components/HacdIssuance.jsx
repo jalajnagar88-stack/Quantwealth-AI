@@ -48,6 +48,9 @@ export default function HacdIssuance() {
   const [generating, setGenerating] = useState(false);
   const [generatedDocs, setGeneratedDocs] = useState({});
   const [error, setError] = useState('');
+  const [scoreResult, setScoreResult] = useState(null);
+  const [roastResult, setRoastResult] = useState(null);
+  const [showIntakeModal, setShowIntakeModal] = useState(false);
   const [success, setSuccess] = useState('');
 
   // Form state
@@ -190,6 +193,49 @@ export default function HacdIssuance() {
       a.download = `${currentSpec.project.ticker}_launch_spec.json`;
       a.click();
       window.URL.revokeObjectURL(url);
+    }
+  };
+
+  const expandIntake = async (answers) => {
+    setLoading(true);
+    setError('');
+    const data = await apiFetch('/expand-intake', {
+      method: 'POST',
+      body: JSON.stringify(answers),
+    });
+    setLoading(false);
+    if (data.success) {
+      setFormData(data.data);
+      setSuccess('Intake form expanded from Google Form answers!');
+      setTimeout(() => setSuccess(''), 3000);
+    } else {
+      setError(data.message || 'Intake expansion failed');
+    }
+  };
+
+  const scoreProject = async () => {
+    if (!currentSpec) return;
+    setLoading(true);
+    setError('');
+    const data = await apiFetch(`/${currentSpec._id}/score`, { method: 'POST' });
+    setLoading(false);
+    if (data.success) {
+      setScoreResult(data.data);
+    } else {
+      setError(data.message || 'Scoring failed');
+    }
+  };
+
+  const roastSpec = async () => {
+    if (!currentSpec) return;
+    setLoading(true);
+    setError('');
+    const data = await apiFetch(`/${currentSpec._id}/roast`, { method: 'POST' });
+    setLoading(false);
+    if (data.success) {
+      setRoastResult(data.data);
+    } else {
+      setError(data.message || 'Roast mode failed');
     }
   };
 
@@ -631,6 +677,12 @@ export default function HacdIssuance() {
                 <button className="hi-btn" onClick={validateSpec} disabled={loading}>
                   <Shield size={16} /> Validate
                 </button>
+                <button className="hi-btn" onClick={scoreProject} disabled={loading}>
+                  <CheckCircle2 size={16} /> Score Project
+                </button>
+                <button className="hi-btn" onClick={roastSpec} disabled={loading}>
+                  <AlertCircle size={16} /> Roast Mode
+                </button>
                 <button className="hi-btn" onClick={exportSpec}>
                   <Download size={16} /> Export JSON
                 </button>
@@ -670,6 +722,43 @@ export default function HacdIssuance() {
                       <span className="hi-doc-status">✓ Generated</span>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {scoreResult && (
+                <div className="hi-validation passed">
+                  <h3><CheckCircle2 size={20} /> Project Score: {scoreResult.overall_score}/10</h3>
+                  <div className="hi-errors">
+                    <h4>Criteria Scores:</h4>
+                    {Object.entries(scoreResult.criteria).map(([key, value]) => (
+                      <div key={key} className="hi-error-item">
+                        <strong>{key.replace(/_/g, ' ').toUpperCase()}:</strong> {value.score}/10 — {value.reasoning}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="hi-warnings">
+                    <h4>Recommendations:</h4>
+                    {scoreResult.recommendations.map((rec, i) => (
+                      <div key={i} className="hi-warning-item">💡 {rec}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {roastResult && (
+                <div className={`hi-validation ${roastResult.overall_grade === 'A' || roastResult.overall_grade === 'B' ? 'passed' : 'failed'}`}>
+                  <h3><AlertCircle size={20} /> Roast Mode — Grade: {roastResult.overall_grade}</h3>
+                  <p>{roastResult.summary}</p>
+                  <div className="hi-errors">
+                    <h4>Issues Found:</h4>
+                    {roastResult.issues.map((issue, i) => (
+                      <div key={i} className="hi-error-item">
+                        <strong>[{issue.severity.toUpperCase()}] {issue.category}:</strong> {issue.issue}
+                        <br />
+                        <span style={{ marginLeft: '20px' }}>Fix: {issue.fix}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

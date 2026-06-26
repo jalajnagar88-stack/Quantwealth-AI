@@ -3,6 +3,9 @@ import { authMiddleware } from '../middleware/auth';
 import { HacdLaunchSpec, IHacdLaunchSpec } from '../models/HacdLaunchSpec';
 import { generateAllDocuments, generateSingleDocument } from '../services/HacdDocumentGenerator';
 import { validateLaunchSpec } from '../services/HacdValidator';
+import { expandGoogleFormToIntake } from '../services/HacdIntakeExpander';
+import { scoreProject } from '../services/HacdProjectScorer';
+import { roastLaunchSpec } from '../services/HacdRoastMode';
 
 const router: Router = express.Router();
 router.use(authMiddleware);
@@ -238,6 +241,62 @@ router.get('/:id/export', async (req: Request, res: Response) => {
     res.send(JSON.stringify(exportData, null, 2));
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message || 'Export failed' });
+  }
+});
+
+// Expand Google Form answers to full intake form
+router.post('/expand-intake', async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const answers = req.body;
+    const intakeForm = await expandGoogleFormToIntake(answers);
+    res.json({ success: true, data: intakeForm });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message || 'Intake expansion failed' });
+  }
+});
+
+// Score project (5 criteria)
+router.post('/:id/score', async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const spec = await HacdLaunchSpec.findOne({ _id: req.params.id, userId });
+    if (!spec) {
+      return res.status(404).json({ success: false, message: 'Launch spec not found' });
+    }
+
+    const scoreResult = scoreProject(spec);
+    res.json({ success: true, data: scoreResult });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message || 'Scoring failed' });
+  }
+});
+
+// Roast mode (self-review)
+router.post('/:id/roast', async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    const spec = await HacdLaunchSpec.findOne({ _id: req.params.id, userId });
+    if (!spec) {
+      return res.status(404).json({ success: false, message: 'Launch spec not found' });
+    }
+
+    const roastResult = await roastLaunchSpec(spec);
+    res.json({ success: true, data: roastResult });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message || 'Roast mode failed' });
   }
 });
 
