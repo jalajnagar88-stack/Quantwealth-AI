@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   FileText, Zap, CheckCircle2, AlertCircle, 
   Download, ArrowRight, ArrowLeft, RefreshCw,
-  Package, Settings, Launch, FileEdit, Shield
+  Package, Settings, Rocket, FileEdit, Shield
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './HacdIssuance.css';
@@ -506,7 +506,7 @@ export default function HacdIssuance() {
       {/* Step 4: Launch Settings */}
       {step === 4 && (
         <div className="hi-section">
-          <h2><Launch size={20} /> Launch Settings</h2>
+          <h2><Rocket size={20} /> Launch Settings</h2>
           <div className="hi-form-grid">
             <div className="hi-form-group">
               <label>Target Date (UTC) *</label>
