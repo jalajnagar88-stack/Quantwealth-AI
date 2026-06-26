@@ -135,13 +135,13 @@ export function validateCrossDocConsistency(spec: IHacdLaunchSpec): ValidationRe
     }
   };
 
-  // Check key numbers in generated docs
-  if (spec.generated_docs.stack_design) {
+  // Check key numbers in generated docs (if present)
+  if (spec.generated_docs && spec.generated_docs.stack_design) {
     checkDocConsistency(spec.generated_docs.stack_design, 'stack_design', spec.stack.total_hacd_lots);
     checkDocConsistency(spec.generated_docs.stack_design, 'stack_design', spec.asset.total_supply);
   }
 
-  if (spec.generated_docs.launchpad_copy) {
+  if (spec.generated_docs && spec.generated_docs.launchpad_copy) {
     checkDocConsistency(spec.generated_docs.launchpad_copy, 'launchpad_copy', spec.project.ticker);
   }
 
