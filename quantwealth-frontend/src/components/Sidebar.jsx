@@ -27,9 +27,10 @@ const Sidebar = () => {
   // HACD Issuance link added for Incubator Cohort 2
   const navItems = [
     { path: '/dashboard',          icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/hacd-analysis',      icon: TrendingUp,      label: 'HACD Analysis', badge: 'NEW' },
+    { path: '/hacd-issuance',      icon: Zap,             label: 'HACD Issuance', badge: 'NEW' },
     { path: '/trade-brief',        icon: Briefcase,       label: 'Trade Brief', badge: 'NEW' },
     { path: '/paper-trading',      icon: Wallet,          label: 'Paper Trading', badge: 'NEW' },
-    { path: '/hacd-issuance',      icon: Zap,             label: 'HACD Issuance', badge: 'NEW' },
     { path: '/watchlist',           icon: Star,            label: 'Watchlist' },
     { path: '/strategy-simulator', icon: PlayCircle,      label: 'Strategy Simulator' },
     { path: '/ai-signals',         icon: Zap,             label: 'AI Signals' },

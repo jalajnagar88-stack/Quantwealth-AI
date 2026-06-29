@@ -20,6 +20,7 @@ import TradeBrief from './components/TradeBrief';
 import Watchlist from './components/Watchlist';
 import PaperTrading from './components/PaperTrading';
 import HacdIssuance from './components/HacdIssuance';
+import HacdAnalysis from './components/HacdAnalysis';
 import UserProfile from './components/UserProfile';
 import AboutUs from './components/AboutUs';
 import Settings from './components/Settings';
@@ -144,6 +145,13 @@ function App() {
             <ProtectedRoute>
               <MainLayout>
                 <HacdIssuance />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/hacd-analysis" element={
+            <ProtectedRoute>
+              <MainLayout>
+                <HacdAnalysis />
               </MainLayout>
             </ProtectedRoute>
           } />

@@ -14,6 +14,8 @@ const MainLayout = ({ children }) => {
     if (path === '/news-trends') return 'News & Trends';
     if (path === '/trading-assistant') return 'Trading Assistant';
     if (path === '/profile') return 'Profile';
+    if (path === '/hacd-issuance') return 'HACD Issuance';
+    if (path === '/hacd-analysis') return 'HACD Token Analysis';
     return '';
   };
 

@@ -19,6 +19,7 @@ import alertRoutes from './routes/alerts';
 import portfolioRoutes from './routes/portfolio';
 import paperTradingRoutes from './routes/paperTrading';
 import hacdIssuanceRoutes from './routes/hacdIssuance';
+import hacdAnalysisRoutes from './routes/hacdAnalysis';
 import { apiLimiter, authLimiter, backtestLimiter } from './middleware/rateLimiter';
 import { globalErrorHandler, notFoundHandler } from './middleware/errorHandler';
 
@@ -86,6 +87,7 @@ app.get('/health', (req: Request, res: Response) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/signals', signalRoutes);
+app.use('/api/hacd-analysis', hacdAnalysisRoutes);
 app.use('/api/market', marketRoutes);
 app.use('/api/backtest', backtestRoutes);
 app.use('/api/news', newsRoutes);
