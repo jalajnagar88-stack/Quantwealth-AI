@@ -10,7 +10,7 @@ export interface ITrade {
 }
 
 export interface IBacktest extends Document {
-  userId: string;
+  userId: number;
   symbol: string;
   stockName: string;
   strategy: string;
@@ -46,7 +46,7 @@ const TradeSchema: Schema = new Schema({
 
 const BacktestSchema: Schema = new Schema({
   userId: {
-    type: String,
+    type: Number,
     required: true,
     index: true
   },
@@ -143,21 +143,5 @@ const BacktestSchema: Schema = new Schema({
 BacktestSchema.index({ userId: 1, createdAt: -1 });
 BacktestSchema.index({ userId: 1, symbol: 1 });
 BacktestSchema.index({ strategy: 1 });
-
-// Pre-save hook to ensure userId is always a string
-BacktestSchema.pre('save', function(next) {
-  if (this.userId && typeof this.userId !== 'string') {
-    this.userId = String(this.userId);
-  }
-  next();
-});
-
-// Pre-validate hook to ensure userId is always a string before validation
-BacktestSchema.pre('validate', function(next) {
-  if (this.userId && typeof this.userId !== 'string') {
-    this.userId = String(this.userId);
-  }
-  next();
-});
 
 export default mongoose.model<IBacktest>('Backtest', BacktestSchema);
