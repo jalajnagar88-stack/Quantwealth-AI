@@ -318,6 +318,25 @@ export const updateProfile = async (req: Request, res: Response) => {
   }
 };
 
+// Logout endpoint
+export const logout = async (req: Request, res: Response) => {
+  try {
+    // For now, just return success - client-side token clearing is sufficient
+    // TODO: Implement token blocklist with Redis for multi-instance support
+    res.json({
+      success: true,
+      message: 'Logged out successfully'
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to logout',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+};
+
 // Placeholder for other auth functions
 export const verifyOTP = async (req: Request, res: Response) => {
   res.status(501).json({ success: false, message: 'OTP verification not implemented in PostgreSQL version' });

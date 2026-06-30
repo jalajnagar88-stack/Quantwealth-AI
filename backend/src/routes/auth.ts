@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import {
   register,
   login,
+  logout,
   verifyOTP,
   resendOTP,
   getProfile,
@@ -88,6 +89,7 @@ const resetPasswordValidation = [
 // Routes
 router.post('/register', registerValidation, register);
 router.post('/login', loginValidation, login);
+router.post('/logout', authMiddleware, logout);
 router.post('/verify-otp', otpValidation, verifyOTP);
 router.post('/resend-otp', body('userId').notEmpty(), body('type').isIn(['email', 'phone']), resendOTP);
 router.get('/profile', authMiddleware, getProfile);
