@@ -10,7 +10,7 @@ export interface ITrade {
 }
 
 export interface IBacktest extends Document {
-  userId: string;
+  userId: number;
   symbol: string;
   stockName: string;
   strategy: string;
@@ -46,8 +46,7 @@ const TradeSchema: Schema = new Schema({
 
 const BacktestSchema: Schema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+    type: Number,
     required: true,
     index: true
   },
