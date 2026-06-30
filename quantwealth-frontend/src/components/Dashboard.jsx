@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import MetricCard from './MetricCard';
 import './Dashboard.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const EMPTY_STATS = {
   totalBacktests: 0,
@@ -15,11 +15,10 @@ const EMPTY_STATS = {
   totalProfit: 0,
 };
 
-function formatINR(n) {
-  if (Math.abs(n) >= 1e7) return `₹${(n / 1e7).toFixed(1)}Cr`;
-  if (Math.abs(n) >= 1e5) return `₹${(n / 1e5).toFixed(1)}L`;
-  if (Math.abs(n) >= 1e3) return `₹${(n / 1e3).toFixed(1)}K`;
-  return `₹${n.toFixed(0)}`;
+function formatUSD(n) {
+  if (Math.abs(n) >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
+  if (Math.abs(n) >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
+  return `$${n.toFixed(0)}`;
 }
 
 function SkeletonCard() {
@@ -34,7 +33,7 @@ function RecentBacktest({ bt }) {
       <span className="db-recent-strategy">{bt.strategy}</span>
       <span className={`db-recent-pnl ${profit >= 0 ? 'pos' : 'neg'}`}>
         {profit >= 0 ? <TrendingUp size={12}/> : <TrendingDown size={12}/>}
-        {profit >= 0 ? '+' : ''}{formatINR(profit)}
+        {profit >= 0 ? '+' : ''}{formatUSD(profit)}
       </span>
       <span className="db-recent-wr">{(bt.winRate ?? 0).toFixed(0)}% WR</span>
     </div>
@@ -63,9 +62,9 @@ function Dashboard() {
     const h = { 'Authorization': `Bearer ${token}` };
 
     Promise.all([
-      fetch(`${API_URL}/backtest/stats`,   { headers: h }).then(r => r.json()).catch(() => null),
-      fetch(`${API_URL}/backtest/history?limit=5`, { headers: h }).then(r => r.json()).catch(() => null),
-      fetch(`${API_URL}/news?limit=5`,    { headers: h }).then(r => r.json()).catch(() => null),
+      fetch(`${API_URL}/api/backtest/stats`,   { headers: h }).then(r => r.json()).catch(() => null),
+      fetch(`${API_URL}/api/backtest/history?limit=5`, { headers: h }).then(r => r.json()).catch(() => null),
+      fetch(`${API_URL}/api/news?limit=5`,    { headers: h }).then(r => r.json()).catch(() => null),
     ]).then(([statsRes, histRes, newsRes]) => {
       if (statsRes?.success)  setStats(statsRes.data.overall ?? EMPTY_STATS);
       if (histRes?.success)   setRecents(histRes.data.backtests ?? []);
@@ -116,7 +115,7 @@ function Dashboard() {
             />
             <MetricCard
               label="Total Simulated P&L"
-              value={s.totalBacktests > 0 ? formatINR(s.totalProfit ?? 0) : '—'}
+              value={s.totalBacktests > 0 ? formatUSD(s.totalProfit ?? 0) : '—'}
               change={s.totalProfit >= 0 ? `${netProfitSign}${(s.avgRoi ?? 0).toFixed(1)}% avg` : 'Net loss'}
               trend={s.totalProfit >= 0 ? 'up' : 'down'}
             />
@@ -174,7 +173,7 @@ function Dashboard() {
               <BarChart2 size={16}/>
               <div>
                 <strong>Strategy Simulator</strong>
-                <span>Backtest RSI, MACD, Breakout on real NSE data</span>
+                <span>Backtest RSI, MACD, Breakout on real market data</span>
               </div>
               <ArrowRight size={14}/>
             </Link>
@@ -182,7 +181,7 @@ function Dashboard() {
               <Zap size={16}/>
               <div>
                 <strong>AI Signals</strong>
-                <span>Generate BUY/SELL signals for Nifty 50 stocks</span>
+                <span>Generate BUY/SELL signals for crypto assets</span>
               </div>
               <ArrowRight size={14}/>
             </Link>
@@ -190,7 +189,7 @@ function Dashboard() {
               <ShieldCheck size={16}/>
               <div>
                 <strong>Trading Assistant</strong>
-                <span>Ask the AI about any NSE stock or strategy</span>
+                <span>Ask the AI about any crypto asset or strategy</span>
               </div>
               <ArrowRight size={14}/>
             </Link>
@@ -198,7 +197,7 @@ function Dashboard() {
               <Newspaper size={16}/>
               <div>
                 <strong>News & Trends</strong>
-                <span>Live Indian market news with sentiment</span>
+                <span>Live market news with sentiment</span>
               </div>
               <ArrowRight size={14}/>
             </Link>

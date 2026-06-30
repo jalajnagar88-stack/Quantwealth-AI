@@ -2,17 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { TrendingUp, TrendingDown, Clock, ExternalLink, RefreshCw, Search, Newspaper, AlertCircle } from 'lucide-react';
 import './NewsTrends.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const SECTOR_TRENDS = [
-  { sector: 'IT Services',  stocks: ['TCS', 'INFY', 'WIPRO', 'HCLTECH'] },
-  { sector: 'Banking',      stocks: ['HDFCBANK', 'ICICIBANK', 'SBIN', 'KOTAKBANK'] },
-  { sector: 'Auto',         stocks: ['TATAMOTORS', 'M&M', 'MARUTI'] },
-  { sector: 'Pharma',       stocks: ['SUNPHARMA', 'CIPLA', 'DRREDDY'] },
-  { sector: 'Energy',       stocks: ['RELIANCE', 'ONGC', 'NTPC'] },
-  { sector: 'FMCG',         stocks: ['ITC', 'HINDUNILVR', 'NESTLEIND'] },
-  { sector: 'Infra & Power',stocks: ['POWERGRID', 'NTPC', 'L&T', 'ADANIPORTS'] },
-  { sector: 'Metals',       stocks: ['TATASTEEL', 'JSWSTEEL', 'HINDALCO', 'COALINDIA'] },
+  { sector: 'Layer 1',      stocks: ['BTC', 'ETH', 'SOL', 'AVAX'] },
+  { sector: 'DeFi',         stocks: ['HACD', 'HAC', 'CARAT', 'UNI'] },
+  { sector: 'Layer 2',      stocks: ['MATIC', 'ARB', 'OP'] },
+  { sector: 'Ecosystem',    stocks: ['ADA', 'DOT', 'ATOM'] },
 ];
 
 const ALL_CATEGORIES = ['All', 'Market Update', 'Earnings', 'Policy', 'IPO', 'FII/FPI', 'M&A', 'Corporate Action', 'General'];
@@ -44,7 +40,7 @@ const NewsTrends = () => {
       const token = localStorage.getItem('token');
 
       if (forceRefresh) {
-        await fetch(`${API_URL}/news/refresh`, {
+        await fetch(`${API_URL}/api/news/refresh`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -54,7 +50,7 @@ const NewsTrends = () => {
       if (selectedCategory !== 'All') params.append('category', selectedCategory);
       if (searchQuery.trim()) params.append('search', searchQuery.trim());
 
-      const response = await fetch(`${API_URL}/news?${params}`, {
+      const response = await fetch(`${API_URL}/api/news?${params}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -97,7 +93,7 @@ const NewsTrends = () => {
           <p className="nt-subtitle">
             {lastUpdated ? (
               <><span className="live-dot" style={{marginRight:6}}></span>Updated {timeAgo(lastUpdated)}</>
-            ) : 'Live Indian market news'}
+            ) : 'Live market news'}
           </p>
         </div>
         <button

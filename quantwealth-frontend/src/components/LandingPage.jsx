@@ -26,14 +26,14 @@ const LandingPage = () => {
       <section className="hero">
         <div className="hero-content">
           <div className="hero-badge">
-            <span>Built for Indian Markets</span>
+            <span>Built for Crypto Markets</span>
           </div>
           <h1 className="hero-title">
             Smarter Trading,<br />
             <span className="gradient-text">Better Returns</span>
           </h1>
           <p className="hero-subtitle">
-            India's most advanced trading intelligence platform. Backtest strategies, get real-time signals,
+            The most advanced trading intelligence platform. Backtest strategies, get real-time signals,
             and let AI find your next opportunity.
           </p>
           <div className="hero-cta">
@@ -77,7 +77,7 @@ const LandingPage = () => {
         <div className="section-header">
           <span className="section-tag">Features</span>
           <h2>Everything You Need to Trade Smarter</h2>
-          <p>Powerful tools built for both beginners and seasoned traders in Indian markets</p>
+          <p>Powerful tools built for both beginners and seasoned traders in crypto markets</p>
         </div>
 
         <div className="features-grid">
@@ -86,14 +86,14 @@ const LandingPage = () => {
               <Brain size={32} />
             </div>
             <h3>AI Trading Assistant</h3>
-            <p>Get personalised investment recommendations powered by AI trained on decades of Indian market data.</p>
+            <p>Get personalised investment recommendations powered by AI trained on decades of market data.</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon gradient-2">
               <BarChart3 size={32} />
             </div>
             <h3>Strategy Simulator</h3>
-            <p>Backtest your strategies on 10+ years of NSE and BSE data before putting real capital at risk.</p>
+            <p>Backtest your strategies on 10+ years of market data before putting real capital at risk.</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon gradient-3">
@@ -132,7 +132,7 @@ const LandingPage = () => {
               <span className="logo-icon">Q</span>
               <span className="logo-text">QuantWealth AI</span>
             </div>
-            <p>Intelligent trading tools built for the Indian investor.</p>
+            <p>Intelligent trading tools built for the crypto investor.</p>
           </div>
           <div className="footer-links">
             <div className="footer-column">

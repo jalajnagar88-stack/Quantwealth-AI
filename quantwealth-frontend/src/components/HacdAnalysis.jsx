@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TrendingUp, TrendingDown, Activity, DollarSign, BarChart3, Target, Zap, Clock } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const HacdAnalysis = () => {
   const [marketData, setMarketData] = useState(null);
@@ -34,7 +34,7 @@ const HacdAnalysis = () => {
   const fetchMarketData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/hacd-analysis/market`, {
+      const response = await axios.get(`${API_URL}/api/hacd-analysis/market`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMarketData(response.data.data);
@@ -46,7 +46,7 @@ const HacdAnalysis = () => {
   const fetchHistoricalPrices = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/hacd-analysis/historical?days=30`, {
+      const response = await axios.get(`${API_URL}/api/hacd-analysis/historical?days=30`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setHistoricalPrices(response.data.data);
@@ -58,7 +58,7 @@ const HacdAnalysis = () => {
   const fetchPricePrediction = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/hacd-analysis/price-prediction?days=7`, {
+      const response = await axios.get(`${API_URL}/api/hacd-analysis/price-prediction?days=7`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPricePrediction(response.data.data);
@@ -73,7 +73,7 @@ const HacdAnalysis = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${API_URL}/hacd-analysis/rarity`,
+        `${API_URL}/api/hacd-analysis/rarity`,
         { hacdName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -90,7 +90,7 @@ const HacdAnalysis = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${API_URL}/hacd-analysis/predict-stack-cost`,
+        `${API_URL}/api/hacd-analysis/predict-stack-cost`,
         { projectCategory, hacdName, targetSupply },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -106,7 +106,7 @@ const HacdAnalysis = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${API_URL}/hacd-analysis/backtest`,
+        `${API_URL}/api/hacd-analysis/backtest`,
         backtestConfig,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -122,7 +122,7 @@ const HacdAnalysis = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `${API_URL}/hacd-analysis/comparative-backtest`,
+        `${API_URL}/api/hacd-analysis/comparative-backtest`,
         { totalLots: backtestConfig.totalLots, unitsPerLot: backtestConfig.unitsPerLot },
         { headers: { Authorization: `Bearer ${token}` } }
       );

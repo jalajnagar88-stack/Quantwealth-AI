@@ -2,19 +2,19 @@ import React, { useState, useCallback } from 'react';
 import { TrendingUp, TrendingDown, Minus, Zap, RefreshCw, ChevronDown, ChevronUp, AlertCircle, Bot } from 'lucide-react';
 import './SignalsList.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
-const NSE_STOCKS = [
-  { symbol: 'TCS',        name: 'Tata Consultancy Services', sector: 'IT' },
-  { symbol: 'INFY',       name: 'Infosys',                   sector: 'IT' },
-  { symbol: 'RELIANCE',   name: 'Reliance Industries',       sector: 'Energy' },
-  { symbol: 'HDFCBANK',   name: 'HDFC Bank',                 sector: 'Banking' },
-  { symbol: 'ICICIBANK',  name: 'ICICI Bank',                sector: 'Banking' },
-  { symbol: 'SBIN',       name: 'State Bank of India',       sector: 'Banking' },
-  { symbol: 'WIPRO',      name: 'Wipro',                     sector: 'IT' },
-  { symbol: 'SUNPHARMA',  name: 'Sun Pharmaceutical',        sector: 'Pharma' },
-  { symbol: 'TATAMOTORS', name: 'Tata Motors',               sector: 'Auto' },
-  { symbol: 'ITC',        name: 'ITC',                       sector: 'FMCG' },
+const CRYPTO_ASSETS = [
+  { symbol: 'BTC',  name: 'Bitcoin',     sector: 'Layer 1' },
+  { symbol: 'ETH',  name: 'Ethereum',    sector: 'Layer 1' },
+  { symbol: 'HACD', name: 'HACD Token',  sector: 'DeFi' },
+  { symbol: 'HAC',  name: 'HAC Token',   sector: 'DeFi' },
+  { symbol: 'CARAT', name: 'Carat Token', sector: 'DeFi' },
+  { symbol: 'SOL',  name: 'Solana',      sector: 'Layer 1' },
+  { symbol: 'ADA',  name: 'Cardano',     sector: 'Layer 1' },
+  { symbol: 'DOT',  name: 'Polkadot',    sector: 'Layer 1' },
+  { symbol: 'MATIC', name: 'Polygon',    sector: 'Layer 2' },
+  { symbol: 'AVAX', name: 'Avalanche',   sector: 'Layer 1' },
 ];
 
 function mockTechnicals(symbol) {
@@ -96,7 +96,7 @@ function SignalCard({ item, onGenerate, expanded, onToggle }) {
 
 function SignalsList() {
   const [stocks, setStocks] = useState(
-    NSE_STOCKS.map(s => ({ ...s, signal: null, loading: false, error: null }))
+    CRYPTO_ASSETS.map(s => ({ ...s, signal: null, loading: false, error: null }))
   );
   const [expanded,   setExpanded]   = useState({});
   const [generating, setGenerating] = useState(false);
@@ -133,7 +133,7 @@ function SignalsList() {
 
   const generateAll = useCallback(async () => {
     setGenerating(true);
-    await Promise.all(NSE_STOCKS.map(s => generateOne(s.symbol)));
+    await Promise.all(CRYPTO_ASSETS.map(s => generateOne(s.symbol)));
     setGenerating(false);
   }, [generateOne]);
 
@@ -150,7 +150,7 @@ function SignalsList() {
       <div className="sl-header">
         <div>
           <h1 className="sl-title">AI Trading Signals</h1>
-          <p className="sl-subtitle">AI-generated signals using technical indicators for top NSE stocks</p>
+          <p className="sl-subtitle">AI-generated signals using technical indicators for top crypto assets</p>
         </div>
         <div className="sl-header-right">
           {generated > 0 && (

@@ -7,7 +7,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import './HacdIssuance.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 // Asset types
 const ASSET_TYPES = [

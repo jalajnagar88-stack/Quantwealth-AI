@@ -6,7 +6,7 @@ import { runBacktest } from '../services/backtestApi';
 import { stockCategories, allStocks, searchStocks } from '../data/indianStocks';
 
 function Backtest() {
-  const [symbol, setSymbol] = useState('RELIANCE');
+  const [symbol, setSymbol] = useState('BTC');
   const [years, setYears] = useState(5);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
@@ -133,7 +133,7 @@ function Backtest() {
                       >
                         <div className="option-symbol">{stock.symbol}</div>
                         <div className="option-name">{stock.name}</div>
-                        <div className="option-price">₹{stock.price.toLocaleString('en-IN')}</div>
+                        <div className="option-price">${stock.price.toLocaleString('en-IN')}</div>
                       </div>
                     ))}
                   </div>
@@ -197,7 +197,7 @@ function Backtest() {
               Initial Capital
             </label>
             <div className="capital-input">
-              <span className="currency">₹</span>
+              <span className="currency">$</span>
               <input
                 type="number"
                 value={initialCapital}
@@ -213,7 +213,7 @@ function Backtest() {
                   className={initialCapital === amount ? 'active' : ''}
                   onClick={() => setInitialCapital(amount)}
                 >
-                  ₹{(amount / 1000).toFixed(0)}K
+                  ${(amount / 1000).toFixed(0)}K
                 </button>
               ))}
             </div>
@@ -240,7 +240,7 @@ function Backtest() {
 
           <div className="info-note">
             <Info size={14} />
-            <span>Simulations use historical NSE data with transaction costs included</span>
+            <span>Simulations use historical market data with transaction costs included</span>
           </div>
         </div>
 
@@ -273,7 +273,7 @@ function Backtest() {
               <div className="quick-stats">
                 <div className="stat-item">
                   <span className="stat-number">{allStocks.length}+</span>
-                  <span className="stat-label">NSE Stocks</span>
+                  <span className="stat-label">Crypto Assets</span>
                 </div>
                 <div className="stat-item">
                   <span className="stat-number">10+</span>

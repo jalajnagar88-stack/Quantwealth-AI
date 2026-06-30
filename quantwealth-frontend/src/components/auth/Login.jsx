@@ -53,9 +53,9 @@ const Login = () => {
               <div className="logo-icon">QW</div>
               <span className="logo-text">QuantWealth AI</span>
             </div>
-            <h2 className="auth-heading">Your AI-Powered Edge in the Indian Market</h2>
+            <h2 className="auth-heading">Your AI-Powered Edge in the Crypto Market</h2>
             <p className="auth-tagline">
-              Real-time NSE signals, multi-strategy backtesting, and AI insights — trusted by serious traders.
+              Real-time crypto signals, multi-strategy backtesting, and AI insights — trusted by serious traders.
             </p>
           </div>
 
@@ -78,7 +78,7 @@ const Login = () => {
               <div className="trust-badge-icon"><Zap size={18} /></div>
               <div className="trust-badge-text">
                 <strong>Live Market Signals</strong>
-                <span>NSE &amp; BSE coverage · Updated in real-time</span>
+                <span>Crypto coverage · Updated in real-time</span>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@ const Login = () => {
           <div className="auth-stats">
             <div className="stat-item">
               <h3>200+</h3>
-              <p>NSE Stocks</p>
+              <p>Crypto Assets</p>
             </div>
             <div className="stat-item">
               <h3>10yr</h3>

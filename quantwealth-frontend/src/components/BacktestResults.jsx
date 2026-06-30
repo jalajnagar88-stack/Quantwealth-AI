@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { TrendingUp, TrendingDown, Calendar, Target, IndianRupee, Database, FlaskConical } from 'lucide-react';
+import { TrendingUp, TrendingDown, Calendar, Target, DollarSign, Database, FlaskConical } from 'lucide-react';
 import './BacktestResults.css';
 
 function BacktestResults({ data, symbol, stockName, strategy, years, initialCapital }) {
   const canvasRef = useRef(null);
 
-  // Format currency in INR
-  const formatINR = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
+  // Format currency in USD
+  const formatUSD = (amount) => {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'INR',
+      currency: 'USD',
       maximumFractionDigits: 0
     }).format(amount);
   };
@@ -109,8 +109,8 @@ function BacktestResults({ data, symbol, stockName, strategy, years, initialCapi
             {years} Years
           </span>
           <span className="meta-item">
-            <IndianRupee size={14} />
-            Initial: {formatINR(initialCapital)}
+            <DollarSign size={14} />
+            Initial: {formatUSD(initialCapital)}
           </span>
           {data.dataSource && (
             <span className={`meta-item meta-datasource ${data.engineUsed === 'python' ? 'real' : 'mock'}`}>
@@ -126,7 +126,7 @@ function BacktestResults({ data, symbol, stockName, strategy, years, initialCapi
         <div className="key-metric primary">
           <div className="key-label">Final Capital</div>
           <div className={`key-value ${netProfit >= 0 ? 'positive' : 'negative'}`}>
-            {formatINR(finalCapital)}
+            {formatUSD(finalCapital)}
           </div>
           <div className={`key-change ${netProfit >= 0 ? 'positive' : 'negative'}`}>
             {netProfit >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
@@ -137,7 +137,7 @@ function BacktestResults({ data, symbol, stockName, strategy, years, initialCapi
         <div className="key-metric secondary">
           <div className="key-label">Net Profit/Loss</div>
           <div className={`key-value ${netProfit >= 0 ? 'positive' : 'negative'}`}>
-            {netProfit >= 0 ? '+' : ''}{formatINR(netProfit)}
+            {netProfit >= 0 ? '+' : ''}{formatUSD(netProfit)}
           </div>
         </div>
 
@@ -152,11 +152,11 @@ function BacktestResults({ data, symbol, stockName, strategy, years, initialCapi
       <div className="detailed-metrics">
         <div className="metric-card">
           <div className="metric-label">Total Profit</div>
-          <div className="metric-value positive">+{formatINR(data.totalProfit)}</div>
+          <div className="metric-value positive">+{formatUSD(data.totalProfit)}</div>
         </div>
         <div className="metric-card">
           <div className="metric-label">Total Loss</div>
-          <div className="metric-value negative">-{formatINR(data.totalLoss)}</div>
+          <div className="metric-value negative">-{formatUSD(data.totalLoss)}</div>
         </div>
         <div className="metric-card">
           <div className="metric-label">Profit Factor</div>
@@ -173,7 +173,7 @@ function BacktestResults({ data, symbol, stockName, strategy, years, initialCapi
         <div className="metric-card">
           <div className="metric-label">Avg Profit/Trade</div>
           <div className={`metric-value ${avgProfitPerTrade >= 0 ? 'positive' : 'negative'}`}>
-            {avgProfitPerTrade >= 0 ? '+' : ''}{formatINR(avgProfitPerTrade)}
+            {avgProfitPerTrade >= 0 ? '+' : ''}{formatUSD(avgProfitPerTrade)}
           </div>
         </div>
       </div>
@@ -220,7 +220,7 @@ function BacktestResults({ data, symbol, stockName, strategy, years, initialCapi
                     {trade.type}
                   </span>
                 </div>
-                <div className="col-price">{formatINR(trade.price)}</div>
+                <div className="col-price">{formatUSD(trade.price)}</div>
                 <div className={`col-pnl ${pnlPct >= 0 ? 'positive' : 'negative'}`}>
                   {pnlPct > 0 ? '+' : ''}{pnlPct.toFixed(2)}%
                 </div>
@@ -237,7 +237,7 @@ function BacktestResults({ data, symbol, stockName, strategy, years, initialCapi
           <li>Transaction costs (brokerage + taxes) of 0.5% per trade included</li>
           <li>Results are based on historical data and may not reflect future performance</li>
           <li>Slippage of 0.1% applied to all trades</li>
-          <li>Strategy tested on NSE historical data</li>
+          <li>Strategy tested on historical market data</li>
         </ul>
       </div>
     </div>

@@ -25,6 +25,9 @@ export const runBacktest = async (req: Request, res: Response) => {
       });
     }
 
+    // Convert userId to string for MongoDB compatibility
+    const userIdStr = String(userId);
+
     const { symbol, stockName, strategy, years, initialCapital } = req.body;
 
     // Try real NSE data engine first, fall back to mock if Yahoo Finance fails
@@ -52,7 +55,7 @@ export const runBacktest = async (req: Request, res: Response) => {
 
     // Save to database
     const backtest = new Backtest({
-      userId,
+      userId: userIdStr,
       symbol: symbol.toUpperCase(),
       stockName: stockName || symbol,
       strategy,

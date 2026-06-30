@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Star, Plus, Trash2, Bell, BellOff, TrendingUp, TrendingDown, X, Briefcase } from 'lucide-react';
 import './Watchlist.css';
 
-const API = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const getToken = () => localStorage.getItem('token');
 
@@ -12,12 +12,9 @@ const apiFetch = (path, opts = {}) =>
     ...opts,
   }).then(r => r.json());
 
-const NIFTY50 = [
-  'RELIANCE','TCS','HDFCBANK','INFY','ICICIBANK','HINDUNILVR','ITC','SBIN',
-  'BHARTIARTL','KOTAKBANK','LT','AXISBANK','ASIANPAINT','MARUTI','TITAN',
-  'SUNPHARMA','BAJFINANCE','WIPRO','ONGC','NTPC','POWERGRID','TATAMOTORS',
-  'TATASTEEL','JSWSTEEL','TECHM','HCLTECH','DRREDDY','DIVISLAB','CIPLA',
-  'EICHERMOT','HEROMOTOCO','BPCL','COALINDIA','NESTLEIND','BAJAJFINSV',
+const CRYPTO_ASSETS = [
+  'BTC','ETH','HACD','HAC','CARAT','SOL','ADA','DOT',
+  'MATIC','AVAX','LINK','UNI','AAVE','COMP','MKR','SNX',
 ];
 
 export default function Watchlist() {
@@ -49,22 +46,22 @@ export default function Watchlist() {
 
   // Fetch all on mount
   useEffect(() => {
-    apiFetch('/watchlist').then(d => { setWlItems(d.items || []); setWlLoading(false); });
-    apiFetch('/alerts').then(d => { setAlerts(d.alerts || []); setAlertLoading(false); });
-    apiFetch('/portfolio').then(d => { setHoldings(d.holdings || []); setPortLoading(false); });
+    apiFetch('/api/watchlist').then(d => { setWlItems(d.items || []); setWlLoading(false); });
+    apiFetch('/api/alerts').then(d => { setAlerts(d.alerts || []); setAlertLoading(false); });
+    apiFetch('/api/portfolio').then(d => { setHoldings(d.holdings || []); setPortLoading(false); });
   }, []);
 
   // Watchlist autocomplete
   const handleWlInput = (v) => {
     setWlInput(v);
     const q = v.toUpperCase();
-    setWlSuggestions(q.length >= 1 ? NIFTY50.filter(s => s.startsWith(q)).slice(0, 6) : []);
+    setWlSuggestions(q.length >= 1 ? CRYPTO_ASSETS.filter(s => s.startsWith(q)).slice(0, 6) : []);
   };
 
   const addToWatchlist = async (sym) => {
     const s = (sym || wlInput).toUpperCase().trim();
     if (!s) return;
-    const d = await apiFetch('/watchlist', { method: 'POST', body: JSON.stringify({ symbol: s }) });
+    const d = await apiFetch('/api/watchlist', { method: 'POST', body: JSON.stringify({ symbol: s }) });
     if (d.error) return flash(d.error, true);
     setWlItems(d.items);
     setWlInput(''); setWlSuggestions([]);
@@ -72,7 +69,7 @@ export default function Watchlist() {
   };
 
   const removeFromWatchlist = async (sym) => {
-    const d = await apiFetch(`/watchlist/${sym}`, { method: 'DELETE' });
+    const d = await apiFetch(`/api/watchlist/${sym}`, { method: 'DELETE' });
     if (d.error) return flash(d.error, true);
     setWlItems(d.items);
     flash(`${sym} removed`);
@@ -82,7 +79,7 @@ export default function Watchlist() {
   const createAlert = async () => {
     const { symbol, targetPrice, condition, note } = alertForm;
     if (!symbol || !targetPrice) return flash('Fill symbol and target price', true);
-    const d = await apiFetch('/alerts', { method: 'POST', body: JSON.stringify({ symbol, targetPrice: parseFloat(targetPrice), condition, note }) });
+    const d = await apiFetch('/api/alerts', { method: 'POST', body: JSON.stringify({ symbol, targetPrice: parseFloat(targetPrice), condition, note }) });
     if (d.error) return flash(d.error, true);
     setAlerts(prev => [d.alert, ...prev]);
     setAlertForm({ symbol: '', targetPrice: '', condition: 'above', note: '' });
@@ -90,7 +87,7 @@ export default function Watchlist() {
   };
 
   const deleteAlert = async (id) => {
-    await apiFetch(`/alerts/${id}`, { method: 'DELETE' });
+    await apiFetch(`/api/alerts/${id}`, { method: 'DELETE' });
     setAlerts(prev => prev.filter(a => a._id !== id));
     flash('Alert deleted');
   };
@@ -99,7 +96,7 @@ export default function Watchlist() {
   const addHolding = async () => {
     const { symbol, qty, avgPrice } = holdForm;
     if (!symbol || !qty || !avgPrice) return flash('Fill all fields', true);
-    const d = await apiFetch('/portfolio/holding', {
+    const d = await apiFetch('/api/portfolio/holding', {
       method: 'POST',
       body: JSON.stringify({ symbol, qty: parseFloat(qty), avgPrice: parseFloat(avgPrice) })
     });
@@ -110,7 +107,7 @@ export default function Watchlist() {
   };
 
   const removeHolding = async (sym) => {
-    const d = await apiFetch(`/portfolio/holding/${sym}`, { method: 'DELETE' });
+    const d = await apiFetch(`/api/portfolio/holding/${sym}`, { method: 'DELETE' });
     if (d.error) return flash(d.error, true);
     setHoldings(d.holdings);
     flash(`${sym} removed`);
@@ -144,7 +141,7 @@ export default function Watchlist() {
             <div className="wl-autocomplete">
               <input
                 className="wl-input"
-                placeholder="Search NSE symbol e.g. RELIANCE"
+                placeholder="Search crypto asset e.g. BTC"
                 value={wlInput}
                 onChange={e => handleWlInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && addToWatchlist()}
@@ -165,7 +162,7 @@ export default function Watchlist() {
           {wlLoading ? <div className="wl-loading">Loading…</div> : wlItems.length === 0 ? (
             <div className="wl-empty">
               <Star size={40} strokeWidth={1.5}/>
-              <p>No stocks yet. Search above to add.</p>
+              <p>No assets yet. Search above to add.</p>
             </div>
           ) : (
             <div className="wl-list">
@@ -174,9 +171,8 @@ export default function Watchlist() {
                   <div className="wl-item-sym">
                     <Star size={16} className="wl-star"/>
                     <span>{item.symbol}</span>
-                    <span className="wl-item-ns">.NS</span>
                   </div>
-                  <span className="wl-item-date">{new Date(item.addedAt).toLocaleDateString('en-IN')}</span>
+                  <span className="wl-item-date">{new Date(item.addedAt).toLocaleDateString('en-US')}</span>
                   <button className="wl-remove" onClick={() => removeFromWatchlist(item.symbol)}>
                     <Trash2 size={15}/>
                   </button>
@@ -198,7 +194,7 @@ export default function Watchlist() {
               <option value="above">Price Above</option>
               <option value="below">Price Below</option>
             </select>
-            <input className="wl-input" type="number" placeholder="Target price (₹)" value={alertForm.targetPrice}
+            <input className="wl-input" type="number" placeholder="Target price ($)" value={alertForm.targetPrice}
               onChange={e => setAlertForm(p => ({ ...p, targetPrice: e.target.value }))} />
             <input className="wl-input" placeholder="Note (optional)" value={alertForm.note}
               onChange={e => setAlertForm(p => ({ ...p, note: e.target.value }))} />
@@ -217,7 +213,7 @@ export default function Watchlist() {
                   </div>
                   <div className="wl-alert-meta">
                     <span className={`wl-cond ${a.condition}`}>{a.condition === 'above' ? '↑ Above' : '↓ Below'}</span>
-                    <span className="wl-price">₹{a.targetPrice.toLocaleString('en-IN')}</span>
+                    <span className="wl-price">${a.targetPrice.toLocaleString('en-US')}</span>
                     {a.note && <span className="wl-note">{a.note}</span>}
                     {a.triggered && <span className="wl-triggered-badge">✓ Triggered</span>}
                   </div>
@@ -246,11 +242,11 @@ export default function Watchlist() {
           )}
 
           <div className="wl-alert-form">
-            <input className="wl-input" placeholder="Symbol e.g. TCS" value={holdForm.symbol}
+            <input className="wl-input" placeholder="Symbol e.g. BTC" value={holdForm.symbol}
               onChange={e => setHoldForm(p => ({ ...p, symbol: e.target.value.toUpperCase() }))} />
             <input className="wl-input" type="number" placeholder="Qty" value={holdForm.qty}
               onChange={e => setHoldForm(p => ({ ...p, qty: e.target.value }))} />
-            <input className="wl-input" type="number" placeholder="Avg buy price (₹)" value={holdForm.avgPrice}
+            <input className="wl-input" type="number" placeholder="Avg buy price ($)" value={holdForm.avgPrice}
               onChange={e => setHoldForm(p => ({ ...p, avgPrice: e.target.value }))} />
             <button className="wl-btn-primary" onClick={addHolding}><Plus size={15}/> Add Holding</button>
           </div>
@@ -266,8 +262,8 @@ export default function Watchlist() {
                 <div key={h.symbol} className="wl-port-row">
                   <span className="wl-port-sym">{h.symbol}</span>
                   <span>{h.qty}</span>
-                  <span>₹{h.avgPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
-                  <span>₹{(h.qty * h.avgPrice).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                  <span>${h.avgPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                  <span>${(h.qty * h.avgPrice).toLocaleString('en-US', { maximumFractionDigits: 0 })}</span>
                   <button className="wl-remove" onClick={() => removeHolding(h.symbol)}><Trash2 size={14}/></button>
                 </div>
               ))}

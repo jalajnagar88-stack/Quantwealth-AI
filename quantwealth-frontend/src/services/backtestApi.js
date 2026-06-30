@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -20,7 +20,7 @@ export const runBacktest = async (symbol, years, strategy = 'RSI', initialCapita
   // Find stock name from indianStocks data
   const stockName = symbol; // will be overridden by caller
   
-  const response = await api.post('/backtest/run', {
+  const response = await api.post('/api/backtest/run', {
     symbol,
     stockName: symbol,
     years: parseInt(years),

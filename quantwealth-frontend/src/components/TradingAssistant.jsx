@@ -2,22 +2,22 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Sparkles, Shield, AlertCircle, TrendingUp, RotateCcw, Copy, Check } from 'lucide-react';
 import './TradingAssistant.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const QUICK_QUESTIONS = [
-  'What is the outlook for Nifty 50 this week?',
-  'Analyze TCS vs Infosys for long-term investment',
-  'Explain RSI and how to use it for NSE stocks',
-  'Best sectors to watch in India right now?',
-  'How do FII flows affect Indian markets?',
-  'What is a good entry strategy for HDFC Bank?',
+  'What is the outlook for Bitcoin this week?',
+  'Analyze BTC vs ETH for long-term investment',
+  'Explain RSI and how to use it for crypto trading',
+  'Best sectors to watch in DeFi right now?',
+  'How do institutional flows affect crypto markets?',
+  'What is a good entry strategy for HACD?',
 ];
 
-const WELCOME = `Hello! I'm **QuantWealth AI** — your trading assistant for the Indian markets.
+const WELCOME = `Hello! I'm **QuantWealth AI** — your trading assistant for crypto markets.
 
 I can help you with:
-• **Stock analysis** — NSE/BSE equities, technicals & fundamentals
-• **Market insights** — Nifty, Sensex, sectoral trends
+• **Asset analysis** — Crypto tokens, technicals & fundamentals
+• **Market insights** — BTC, ETH, sectoral trends
 • **Strategy advice** — RSI, MACD, Moving Averages explained
 • **Risk & portfolio** — position sizing, diversification
 
@@ -68,7 +68,7 @@ const TradingAssistant = () => {
         .filter(m => m.role !== 'assistant' || m.content !== WELCOME)
         .map(m => ({ role: m.role, content: m.content }));
 
-      const res = await fetch(`${API_URL}/chat`, {
+      const res = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,12 +114,12 @@ const TradingAssistant = () => {
           </div>
           <div>
             <h1 className="ta-title">AI Trading Assistant</h1>
-            <p className="ta-subtitle">Powered by Gemini · Indian Markets Specialist</p>
+            <p className="ta-subtitle">Powered by Gemini · Crypto Markets Specialist</p>
           </div>
         </div>
         <div className="ta-header-right">
           <span className="ta-badge"><Sparkles size={12} /> AI Powered</span>
-          <span className="ta-badge"><Shield size={12} /> SEBI Disclaimer</span>
+          <span className="ta-badge"><Shield size={12} /> Disclaimer</span>
           <button className="ta-clear-btn" onClick={handleClear} title="Clear chat">
             <RotateCcw size={14} /> Clear
           </button>
@@ -194,7 +194,7 @@ const TradingAssistant = () => {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-              placeholder="Ask about NSE stocks, technicals, strategy…"
+              placeholder="Ask about crypto assets, technicals, strategy…"
               disabled={loading}
             />
             <button
@@ -211,14 +211,14 @@ const TradingAssistant = () => {
         <div className="ta-sidebar">
           <div className="ta-info-card">
             <h3><AlertCircle size={15} /> Disclaimer</h3>
-            <p>AI responses are for educational purposes only and do not constitute SEBI-registered investment advice. Always consult a registered advisor before trading.</p>
+            <p>AI responses are for educational purposes only and do not constitute professional investment advice. Always consult a registered advisor before trading.</p>
           </div>
 
           <div className="ta-info-card">
             <h3><TrendingUp size={15} /> What I can analyse</h3>
             <ul>
-              <li>Nifty 50 / Sensex trends</li>
-              <li>Individual NSE/BSE stocks</li>
+              <li>BTC / ETH trends</li>
+              <li>Individual crypto assets</li>
               <li>Technical indicators (RSI, MACD…)</li>
               <li>Sectoral & macro themes</li>
               <li>Portfolio risk & allocation</li>
@@ -227,7 +227,7 @@ const TradingAssistant = () => {
 
           <div className="ta-info-card ta-info-card--tip">
             <h3><Sparkles size={15} /> Pro tip</h3>
-            <p>Be specific — e.g. <em>"Is TCS a good buy at ₹3800 with RSI at 42?"</em> gets better answers than generic questions.</p>
+            <p>Be specific — e.g. <em>"Is BTC a good buy at $45000 with RSI at 42?"</em> gets better answers than generic questions.</p>
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@ const AboutUs = () => {
             <p>
               At QuantWealth AI, we believe that advanced trading technology should be accessible to everyone, 
               not just institutional investors. Our mission is to democratize AI-powered trading tools and empower 
-              individual investors in India to make smarter, data-driven decisions.
+              individual investors to make smarter, data-driven decisions.
             </p>
             <p>
               We combine cutting-edge artificial intelligence with deep market expertise to provide 
@@ -36,7 +36,7 @@ const AboutUs = () => {
             <div className="stat-card">
               <Target size={32} />
               <h3>Our Vision</h3>
-              <p>To be India's most trusted AI-powered trading platform</p>
+              <p>To be the most trusted AI-powered trading platform</p>
             </div>
           </div>
         </section>
@@ -48,8 +48,8 @@ const AboutUs = () => {
               <div className="feature-icon">
                 <Users size={28} />
               </div>
-              <h3>Built for Indian Markets</h3>
-              <p>Our AI is specifically trained on Indian market data, understanding the unique characteristics of NSE and BSE.</p>
+              <h3>Built for Crypto Markets</h3>
+              <p>Our AI is specifically trained on market data, understanding the unique characteristics of crypto trading.</p>
             </div>
             <div className="feature-item">
               <div className="feature-icon">

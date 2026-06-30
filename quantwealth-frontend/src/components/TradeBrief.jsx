@@ -6,17 +6,16 @@ import {
 } from 'lucide-react';
 import './TradeBrief.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const CAPITAL_PRESETS = [50000, 100000, 250000, 500000, 1000000];
 const RISK_PRESETS    = [1, 2, 3, 5, 10];
 
-function formatINR(n) {
+function formatUSD(n) {
   if (!n && n !== 0) return '—';
-  if (Math.abs(n) >= 1e7) return `₹${(n / 1e7).toFixed(1)}Cr`;
-  if (Math.abs(n) >= 1e5) return `₹${(n / 1e5).toFixed(1)}L`;
-  if (Math.abs(n) >= 1e3) return `₹${(n / 1e3).toFixed(1)}K`;
-  return `₹${Number(n).toFixed(0)}`;
+  if (Math.abs(n) >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
+  if (Math.abs(n) >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
+  return `$${Number(n).toFixed(0)}`;
 }
 
 function ConvictionBadge({ level }) {
@@ -51,19 +50,19 @@ function SetupCard({ setup, index }) {
       <div className="tb-price-grid">
         <div className="tb-price-box tb-price-box--entry">
           <span className="tb-price-label">Entry Zone</span>
-          <span className="tb-price-val">₹{setup.entry}</span>
+          <span className="tb-price-val">${setup.entry}</span>
         </div>
         <div className="tb-price-box tb-price-box--sl">
           <TrendingDown size={12}/>
           <span className="tb-price-label">Stop Loss</span>
-          <span className="tb-price-val">₹{setup.stop_loss}</span>
-          <span className="tb-price-sub">-₹{risk.toFixed(0)}/share</span>
+          <span className="tb-price-val">${setup.stop_loss}</span>
+          <span className="tb-price-sub">-${risk.toFixed(0)}/share</span>
         </div>
         <div className="tb-price-box tb-price-box--target">
           <TrendingUp size={12}/>
           <span className="tb-price-label">Target</span>
-          <span className="tb-price-val">₹{setup.target}</span>
-          <span className="tb-price-sub">+₹{reward.toFixed(0)}/share</span>
+          <span className="tb-price-val">${setup.target}</span>
+          <span className="tb-price-sub">+${reward.toFixed(0)}/share</span>
         </div>
         <div className="tb-price-box tb-price-box--rr">
           <span className="tb-price-label">R:R Ratio</span>
@@ -79,15 +78,15 @@ function SetupCard({ setup, index }) {
         </div>
         <div className="tb-sizing-item">
           <DollarSign size={12}/>
-          <span>{formatINR(setup.sizing.capital_used)} ({setup.sizing.capital_used_pct}% of capital)</span>
+          <span>{formatUSD(setup.sizing.capital_used)} ({setup.sizing.capital_used_pct}% of capital)</span>
         </div>
         <div className="tb-sizing-item tb-sizing-item--risk">
           <AlertTriangle size={12}/>
-          <span>Max loss: {formatINR(setup.sizing.risk_amount)} ({setup.sizing.risk_pct}%)</span>
+          <span>Max loss: {formatUSD(setup.sizing.risk_amount)} ({setup.sizing.risk_pct}%)</span>
         </div>
         <div className="tb-sizing-item tb-sizing-item--profit">
           <Target size={12}/>
-          <span>Potential: +{formatINR(setup.potential_profit)}</span>
+          <span>Potential: +{formatUSD(setup.potential_profit)}</span>
         </div>
       </div>
 
@@ -189,7 +188,7 @@ export default function TradeBrief() {
         <div className="tb-config-section">
           <label className="tb-config-label">Capital to Deploy</label>
           <div className="tb-capital-input">
-            <span className="tb-currency">₹</span>
+            <span className="tb-currency">$</span>
             <input
               type="number"
               value={capital}
@@ -205,7 +204,7 @@ export default function TradeBrief() {
                 className={capital === p ? 'active' : ''}
                 onClick={() => setCapital(p)}
               >
-                {formatINR(p)}
+                {formatUSD(p)}
               </button>
             ))}
           </div>
@@ -213,7 +212,7 @@ export default function TradeBrief() {
 
         <div className="tb-config-section">
           <label className="tb-config-label">
-            <ShieldCheck size={13}/> Max Risk — {formatINR(capital * maxRisk / 100)} ({maxRisk}%)
+            <ShieldCheck size={13}/> Max Risk — {formatUSD(capital * maxRisk / 100)} ({maxRisk}%)
           </label>
           <input
             className="tb-range"
@@ -237,9 +236,9 @@ export default function TradeBrief() {
 
         <div className="tb-config-section tb-config-section--action">
           <div className="tb-summary-preview">
-            <span>Scanning <strong>50 NSE stocks</strong></span>
+            <span>Scanning <strong>50 crypto assets</strong></span>
             <span>Mode: <strong>{mode === 'swing' ? 'Swing (5–10 days)' : 'Intraday (same day)'}</strong></span>
-            <span>Max loss: <strong>{formatINR(capital * maxRisk / 100)}</strong></span>
+            <span>Max loss: <strong>{formatUSD(capital * maxRisk / 100)}</strong></span>
           </div>
           <button
             className="tb-generate-btn"
@@ -247,7 +246,7 @@ export default function TradeBrief() {
             disabled={loading}
           >
             {loading ? (
-              <><RefreshCw size={15} className="tb-spin"/> Scanning 50 stocks…</>
+              <><RefreshCw size={15} className="tb-spin"/> Scanning 50 assets…</>
             ) : (
               <><Zap size={15}/> Generate My Trade Brief</>
             )}
@@ -293,16 +292,16 @@ export default function TradeBrief() {
                 <div className="tb-summary-stat">
                   <span className="tb-summary-label">Total Capital Needed</span>
                   <span className="tb-summary-val">
-                    {formatINR(result.setups.reduce((s, x) => s + (x.sizing?.capital_used || 0), 0))}
+                    {formatUSD(result.setups.reduce((s, x) => s + (x.sizing?.capital_used || 0), 0))}
                   </span>
                 </div>
                 <div className="tb-summary-stat tb-summary-stat--risk">
                   <span className="tb-summary-label">Total Risk</span>
-                  <span className="tb-summary-val">{formatINR(totalRisk)}</span>
+                  <span className="tb-summary-val">{formatUSD(totalRisk)}</span>
                 </div>
                 <div className="tb-summary-stat tb-summary-stat--profit">
                   <span className="tb-summary-label">Total Potential</span>
-                  <span className="tb-summary-val">+{formatINR(totalProfit)}</span>
+                  <span className="tb-summary-val">+{formatUSD(totalProfit)}</span>
                 </div>
                 <div className="tb-summary-stat">
                   <span className="tb-summary-label">Portfolio R:R</span>
@@ -334,7 +333,7 @@ export default function TradeBrief() {
           <h3>Your personalised trade brief, on demand</h3>
           <p>Set your capital and risk tolerance above, hit Generate — and get 2–3 ready-to-trade setups with AI reasoning, exact entry/SL/target, and position sizing calculated to your risk limit.</p>
           <div className="tb-feature-pills">
-            <span>📊 50 NSE stocks scanned</span>
+            <span>📊 50 crypto assets scanned</span>
             <span>🤖 Gemini AI reasoning</span>
             <span>📐 Auto position sizing</span>
             <span>📈 5-year backtested win rates</span>

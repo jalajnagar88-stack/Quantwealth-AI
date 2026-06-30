@@ -89,7 +89,7 @@ const Register = () => {
               <div className="logo-icon">QW</div>
               <span className="logo-text">QuantWealth AI</span>
             </div>
-            <h2 className="auth-heading">India's Smartest AI Trading Platform</h2>
+            <h2 className="auth-heading">The Smartest AI Trading Platform</h2>
             <p className="auth-tagline">
               Professional-grade strategy backtesting, real-time market signals, and AI-powered insights — built for serious traders.
             </p>
@@ -106,7 +106,7 @@ const Register = () => {
             <div className="trust-badge-item">
               <div className="trust-badge-icon"><TrendingUp size={18} /></div>
               <div className="trust-badge-text">
-                <strong>NSE & BSE Coverage</strong>
+                <strong>Crypto Coverage</strong>
                 <span>200+ stocks · Real-time data · 4 strategies</span>
               </div>
             </div>
@@ -122,7 +122,7 @@ const Register = () => {
           <div className="auth-stats">
             <div className="stat-item">
               <h3>200+</h3>
-              <p>NSE Stocks</p>
+              <p>Crypto Assets</p>
             </div>
             <div className="stat-item">
               <h3>10yr</h3>

@@ -155,11 +155,3 @@ CREATE TRIGGER update_portfolios_updated_at BEFORE UPDATE ON portfolios
 DROP TRIGGER IF EXISTS update_watchlists_updated_at ON watchlists;
 CREATE TRIGGER update_watchlists_updated_at BEFORE UPDATE ON watchlists
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-DROP TRIGGER IF EXISTS update_paper_portfolios_updated_at ON paper_portfolios;
-CREATE TRIGGER update_paper_portfolios_updated_at BEFORE UPDATE ON paper_portfolios
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-DROP TRIGGER IF EXISTS update_paper_holdings_updated_at ON paper_holdings;
-CREATE TRIGGER update_paper_holdings_updated_at BEFORE UPDATE ON paper_holdings
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

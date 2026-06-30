@@ -9,7 +9,7 @@ const Settings = () => {
     newsDigest: false,
     theme: 'light',
     language: 'en',
-    currency: 'INR',
+    currency: 'USD',
   });
   const [saved, setSaved] = useState(false);
 
@@ -76,7 +76,6 @@ const Settings = () => {
               <div className="settings-row-desc">Default display currency</div>
             </div>
             <select className="settings-select" value={prefs.currency} onChange={e => set('currency', e.target.value)}>
-              <option value="INR">INR ₹</option>
               <option value="USD">USD $</option>
             </select>
           </div>

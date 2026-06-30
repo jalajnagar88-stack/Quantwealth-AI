@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app';
 
 const AuthContext = createContext(null);
 
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch(`${API_BASE}/auth/login`, {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await fetch(`${API_BASE}/auth/register`, {
+      const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   const verifyOTP = async (otp, type = 'email') => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE}/auth/verify-otp`, {
+      const response = await fetch(`${API_BASE}/api/auth/verify-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }) => {
   const resendOTP = async (type = 'email') => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE}/auth/resend-otp`, {
+      const response = await fetch(`${API_BASE}/api/auth/resend-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        await fetch(`${API_BASE}/auth/logout`, {
+        await fetch(`${API_BASE}/api/auth/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -176,7 +176,7 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (profileData) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE}/auth/profile`, {
+      const response = await fetch(`${API_BASE}/api/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

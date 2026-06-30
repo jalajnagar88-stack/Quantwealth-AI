@@ -21,7 +21,7 @@ function Header({ pageTitle }) {
 
         <div className="header-market-status">
           <span className="live-dot"></span>
-          NSE Open
+          Market Open
         </div>
 
         <button className="header-btn">
