@@ -17,7 +17,7 @@ router.use(authMiddleware);
 // Get or initialize portfolio
 router.get('/portfolio', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -33,7 +33,7 @@ router.get('/portfolio', async (req: Request, res: Response) => {
 // Execute BUY
 router.post('/buy', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -54,7 +54,7 @@ router.post('/buy', async (req: Request, res: Response) => {
 // Execute SELL
 router.post('/sell', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -89,7 +89,7 @@ router.get('/price/:symbol', async (req: Request, res: Response) => {
 // Get transaction history
 router.get('/transactions', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
@@ -116,7 +116,7 @@ router.get('/leaderboard', async (req: Request, res: Response) => {
 // Reset portfolio
 router.post('/reset', async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user?.id;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }
