@@ -244,7 +244,7 @@ export const getBacktestStats = async (req: Request, res: Response) => {
     }
 
     const stats = await Backtest.aggregate([
-      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      { $match: { userId: userId } },
       {
         $group: {
           _id: null,
@@ -260,7 +260,7 @@ export const getBacktestStats = async (req: Request, res: Response) => {
 
     // Get strategy breakdown
     const strategyStats = await Backtest.aggregate([
-      { $match: { userId: new mongoose.Types.ObjectId(userId) } },
+      { $match: { userId: userId } },
       {
         $group: {
           _id: '$strategy',
