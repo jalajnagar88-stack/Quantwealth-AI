@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import MetricCard from './MetricCard';
 import './Dashboard.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const EMPTY_STATS = {
   totalBacktests: 0,

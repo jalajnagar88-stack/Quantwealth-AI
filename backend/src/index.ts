@@ -18,9 +18,10 @@ import watchlistRoutes from './routes/watchlist';
 import alertRoutes from './routes/alerts';
 import portfolioRoutes from './routes/portfolio';
 import paperTradingRoutes from './routes/paperTrading';
-import hacdIssuanceRoutes from './routes/hacdIssuance';
+import hacdIssuanceRoutes from './routes/hacdIssuancePG';
 import hacdAnalysisRoutes from './routes/hacdAnalysis';
 import { apiLimiter, authLimiter, backtestLimiter } from './middleware/rateLimiter';
+import { authMiddleware } from './middleware/authPG';
 import { globalErrorHandler, notFoundHandler } from './middleware/errorHandler';
 
 const app: Express = express();
@@ -109,11 +110,12 @@ app.use(globalErrorHandler);
 export default app;
 
 // Start server in non-serverless environments
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' || process.env.RAILWAY_ENVIRONMENT) {
   app.listen(Number(PORT), HOST, () => {
     console.log('\n🚀 QuantWealth AI Backend Started');
     console.log(`📍 Server: http://localhost:${PORT}`);
     console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🚀 Railway Deployment: Server listening on port ${PORT}`);
   });
 }
 

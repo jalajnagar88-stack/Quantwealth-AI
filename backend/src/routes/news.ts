@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from 'express';
 import newsService from '../services/NewsService';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middleware/authPG';
 
 const router: Router = express.Router();
 

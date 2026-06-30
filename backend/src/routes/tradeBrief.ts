@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from 'express';
 import axios from 'axios';
 import yahooFinance from 'yahoo-finance2';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middleware/authPG';
 
 const router: Router = express.Router();
 router.use(authMiddleware);

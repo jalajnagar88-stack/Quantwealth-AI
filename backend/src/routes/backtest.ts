@@ -7,7 +7,7 @@ import {
   deleteBacktest,
   getBacktestStats
 } from '../controllers/backtestController';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middleware/authPG';
 
 const router: Router = express.Router();
 

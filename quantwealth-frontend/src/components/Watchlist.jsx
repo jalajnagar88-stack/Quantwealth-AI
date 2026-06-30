@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Star, Plus, Trash2, Bell, BellOff, TrendingUp, TrendingDown, X, Briefcase } from 'lucide-react';
 import './Watchlist.css';
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const getToken = () => localStorage.getItem('token');
 

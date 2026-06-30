@@ -9,8 +9,8 @@ import {
   updateProfile,
   forgotPassword,
   resetPassword
-} from '../controllers/authController';
-import { authMiddleware } from '../middleware/auth';
+} from '../controllers/authControllerPG';
+import { authMiddleware } from '../middleware/authPG';
 
 const router: Router = express.Router();
 

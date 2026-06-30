@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middleware/authPG';
 import Watchlist from '../models/Watchlist';
 
 const router = Router();

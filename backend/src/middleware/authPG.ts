@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
+import { getPool } from '../config/database';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 interface JWTPayload {
-  userId: string;
+  userId: number;
   email?: string;
 }
 
@@ -25,17 +25,31 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     // Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
 
-    // Check if user still exists
-    const user = await User.findById(decoded.userId);
-    if (!user) {
+    // Check if user still exists in PostgreSQL
+    const pool = getPool();
+    if (!pool) {
+      return res.status(500).json({
+        success: false,
+        message: 'Database connection failed'
+      });
+    }
+
+    const result = await pool.query(
+      'SELECT id, email FROM users WHERE id = $1',
+      [decoded.userId]
+    );
+
+    if (result.rows.length === 0) {
       return res.status(401).json({
         success: false,
         message: 'User not found. Token invalid.'
       });
     }
 
+    const user = result.rows[0];
+
     // Attach user to request
-    req.user = {
+    (req as any).user = {
       userId: decoded.userId,
       email: user.email
     };
@@ -71,12 +85,20 @@ export const optionalAuthMiddleware = async (req: Request, res: Response, next: 
       const token = authHeader.substring(7);
       const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
       
-      const user = await User.findById(decoded.userId);
-      if (user) {
-        req.user = {
-          userId: decoded.userId,
-          email: user.email
-        };
+      const pool = getPool();
+      if (pool) {
+        const result = await pool.query(
+          'SELECT id, email FROM users WHERE id = $1',
+          [decoded.userId]
+        );
+        
+        if (result.rows.length > 0) {
+          const user = result.rows[0];
+          (req as any).user = {
+            userId: decoded.userId,
+            email: user.email
+          };
+        }
       }
     }
 

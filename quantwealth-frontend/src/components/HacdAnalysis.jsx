@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TrendingUp, TrendingDown, Activity, DollarSign, BarChart3, Target, Zap, Clock } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const HacdAnalysis = () => {
   const [marketData, setMarketData] = useState(null);

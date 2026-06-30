@@ -1,17 +1,35 @@
-import mongoose from 'mongoose';
+import { Pool } from 'pg';
+
+let pool: Pool | null = null;
 
 export const connectDB = async () => {
-  // 1 = connected, 2 = connecting
-  if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) return;
+  if (pool) return pool;
+  
   try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/quantwealth';
-    await mongoose.connect(mongoURI, {
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 20000,
+    // Use DATABASE_URL from environment (Railway public URL)
+    const connectionString = process.env.DATABASE_URL || 
+                            process.env.POSTGRES_URL || 
+                            'postgresql://postgres:MoEAzKDZDmmBFaIfqVFMptomGRbWdhVa@reseau.proxy.rlwy.net:21194/railway';
+    
+    console.log('🔌 Connecting to PostgreSQL with:', connectionString.substring(0, 30) + '...');
+    
+    pool = new Pool({
+      connectionString,
+      max: 20,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 10000,
     });
-    console.log('✅ MongoDB connected successfully');
+    
+    // Test connection
+    const client = await pool.connect();
+    client.release();
+    console.log('✅ PostgreSQL connected successfully');
+    return pool;
   } catch (error) {
-    console.error('❌ MongoDB connection failed:', error);
+    console.error('❌ PostgreSQL connection failed:', error);
     // Don't process.exit in serverless — let the request fail gracefully
+    return null;
   }
 };
+
+export const getPool = () => pool;

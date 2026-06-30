@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express';
-import { authMiddleware } from '../middleware/auth';
+import { authMiddleware } from '../middleware/authPG';
 import { HacdLaunchSpec, IHacdLaunchSpec } from '../models/HacdLaunchSpec';
 import { generateAllDocuments, generateSingleDocument } from '../services/HacdDocumentGenerator';
 import { validateLaunchSpec } from '../services/HacdValidator';

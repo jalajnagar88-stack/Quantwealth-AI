@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Sparkles, Shield, AlertCircle, TrendingUp, RotateCcw, Copy, Check } from 'lucide-react';
 import './TradingAssistant.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const QUICK_QUESTIONS = [
   'What is the outlook for Nifty 50 this week?',

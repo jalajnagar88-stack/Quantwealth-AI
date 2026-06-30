@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import './TradeBrief.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const CAPITAL_PRESETS = [50000, 100000, 250000, 500000, 1000000];
 const RISK_PRESETS    = [1, 2, 3, 5, 10];

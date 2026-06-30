@@ -225,7 +225,7 @@ export const resendOTP = async (req: Request, res: Response) => {
 // Get current user profile
 export const getProfile = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId;
+    const userId = (req as any).user?.userId;
     
     if (!userId) {
       return res.status(401).json({
@@ -260,7 +260,7 @@ export const getProfile = async (req: Request, res: Response) => {
 // Update user profile
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId;
+    const userId = (req as any).user?.userId;
     
     if (!userId) {
       return res.status(401).json({

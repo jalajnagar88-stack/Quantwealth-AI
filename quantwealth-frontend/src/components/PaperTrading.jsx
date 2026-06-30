@@ -8,7 +8,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import './PaperTrading.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const NSE_STOCKS = [
   { symbol: 'RELIANCE', name: 'Reliance Industries', price: 2450 },

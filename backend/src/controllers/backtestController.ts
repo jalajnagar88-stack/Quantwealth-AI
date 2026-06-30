@@ -17,7 +17,7 @@ export const runBacktest = async (req: Request, res: Response) => {
       });
     }
 
-    const userId = req.user?.userId;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -107,7 +107,7 @@ export const runBacktest = async (req: Request, res: Response) => {
 // Get user's backtest history
 export const getBacktestHistory = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -157,7 +157,7 @@ export const getBacktestHistory = async (req: Request, res: Response) => {
 // Get single backtest details
 export const getBacktestDetails = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -196,7 +196,7 @@ export const getBacktestDetails = async (req: Request, res: Response) => {
 // Delete a backtest
 export const deleteBacktest = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -235,7 +235,7 @@ export const deleteBacktest = async (req: Request, res: Response) => {
 // Get backtest statistics for user
 export const getBacktestStats = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId;
+    const userId = (req as any).user?.userId;
     if (!userId) {
       return res.status(401).json({
         success: false,

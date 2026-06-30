@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { TrendingUp, TrendingDown, Minus, Zap, RefreshCw, ChevronDown, ChevronUp, AlertCircle, Bot } from 'lucide-react';
 import './SignalsList.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const NSE_STOCKS = [
   { symbol: 'TCS',        name: 'Tata Consultancy Services', sector: 'IT' },

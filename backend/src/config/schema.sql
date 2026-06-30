@@ -1,0 +1,73 @@
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  phone_number VARCHAR(20) UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  is_email_verified BOOLEAN DEFAULT FALSE,
+  is_phone_verified BOOLEAN DEFAULT FALSE,
+  otp_code VARCHAR(10),
+  otp_expires_at TIMESTAMP,
+  otp_type VARCHAR(10) CHECK (otp_type IN ('email', 'phone')),
+  kyc_status VARCHAR(20) DEFAULT 'pending' CHECK (kyc_status IN ('pending', 'in_progress', 'verified', 'rejected')),
+  profile JSONB DEFAULT '{}',
+  connected_brokers JSONB DEFAULT '[]',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- HACD Launch Specs table
+CREATE TABLE IF NOT EXISTS hacd_launch_specs (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  project_name VARCHAR(255) NOT NULL,
+  project_description TEXT,
+  category VARCHAR(100),
+  team_info JSONB DEFAULT '{}',
+  asset_type VARCHAR(20) CHECK (asset_type IN ('FT', 'NFT', 'SFT', 'HYBRID')),
+  total_supply BIGINT,
+  token_name VARCHAR(100),
+  token_symbol VARCHAR(20),
+  stack_cost DECIMAL(10, 2),
+  total_hacd_lots INTEGER,
+  units_per_hacd_lot INTEGER,
+  phase_model VARCHAR(20) CHECK (phase_model IN ('public', 'allowlist', 'designated')),
+  removal_effect VARCHAR(50),
+  designated_address VARCHAR(255),
+  network_fee_required BOOLEAN DEFAULT FALSE,
+  launchpad_url VARCHAR(500),
+  short_description TEXT,
+  long_description TEXT,
+  marketing_copy TEXT,
+  documents JSONB DEFAULT '{}',
+  validation_result JSONB DEFAULT '{}',
+  project_score JSONB DEFAULT '{}',
+  roast_result JSONB DEFAULT '{}',
+  status VARCHAR(20) DEFAULT 'draft' CHECK (status IN ('draft', 'generated', 'validated', 'submitted')),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone_number);
+CREATE INDEX IF NOT EXISTS idx_hacd_specs_user_id ON hacd_launch_specs(user_id);
+CREATE INDEX IF NOT EXISTS idx_hacd_specs_status ON hacd_launch_specs(status);
+
+-- Function to update updated_at timestamp
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = CURRENT_TIMESTAMP;
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Triggers for updated_at
+CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_hacd_launch_specs_updated_at BEFORE UPDATE ON hacd_launch_specs
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

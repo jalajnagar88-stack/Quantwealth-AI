@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { TrendingUp, TrendingDown, Clock, ExternalLink, RefreshCw, Search, Newspaper, AlertCircle } from 'lucide-react';
 import './NewsTrends.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://hacd-production.up.railway.app/api';
 
 const SECTOR_TRENDS = [
   { sector: 'IT Services',  stocks: ['TCS', 'INFY', 'WIPRO', 'HCLTECH'] },
