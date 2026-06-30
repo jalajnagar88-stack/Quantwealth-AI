@@ -9,7 +9,7 @@ import {
   getLeaderboard,
   resetPortfolio,
   getStockPrice,
-} from '../services/PaperTradingService';
+} from '../services/PaperTradingServicePG';
 
 const router: Router = express.Router();
 router.use(authMiddleware);

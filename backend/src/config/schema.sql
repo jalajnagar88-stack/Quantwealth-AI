@@ -85,9 +85,59 @@ CREATE TABLE IF NOT EXISTS watchlists (
   UNIQUE(user_id)
 );
 
+-- Paper trading portfolios table
+CREATE TABLE IF NOT EXISTS paper_portfolios (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  cash DECIMAL(15, 2) DEFAULT 100000,
+  initial_capital DECIMAL(15, 2) DEFAULT 100000,
+  total_value DECIMAL(15, 2) DEFAULT 100000,
+  total_pnl DECIMAL(15, 2) DEFAULT 0,
+  total_pnl_percent DECIMAL(10, 2) DEFAULT 0,
+  trade_count INTEGER DEFAULT 0,
+  win_count INTEGER DEFAULT 0,
+  loss_count INTEGER DEFAULT 0,
+  win_rate DECIMAL(5, 2) DEFAULT 0,
+  best_trade JSONB,
+  worst_trade JSONB,
+  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id)
+);
+
+-- Paper trading holdings table
+CREATE TABLE IF NOT EXISTS paper_holdings (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  symbol VARCHAR(20) NOT NULL,
+  quantity INTEGER NOT NULL,
+  avg_price DECIMAL(15, 2) NOT NULL,
+  total_invested DECIMAL(15, 2) NOT NULL,
+  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id, symbol)
+);
+
+-- Paper trading transactions table
+CREATE TABLE IF NOT EXISTS paper_transactions (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  symbol VARCHAR(20) NOT NULL,
+  type VARCHAR(10) NOT NULL CHECK (type IN ('BUY', 'SELL')),
+  quantity INTEGER NOT NULL,
+  price DECIMAL(15, 2) NOT NULL,
+  total DECIMAL(15, 2) NOT NULL,
+  pnl DECIMAL(15, 2),
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indexes for new tables
 CREATE INDEX IF NOT EXISTS idx_portfolios_user_id ON portfolios(user_id);
 CREATE INDEX IF NOT EXISTS idx_watchlists_user_id ON watchlists(user_id);
+CREATE INDEX IF NOT EXISTS idx_paper_portfolios_user_id ON paper_portfolios(user_id);
+CREATE INDEX IF NOT EXISTS idx_paper_holdings_user_id ON paper_holdings(user_id);
+CREATE INDEX IF NOT EXISTS idx_paper_holdings_user_symbol ON paper_holdings(user_id, symbol);
+CREATE INDEX IF NOT EXISTS idx_paper_transactions_user_id ON paper_transactions(user_id);
+CREATE INDEX IF NOT EXISTS idx_paper_transactions_timestamp ON paper_transactions(timestamp DESC);
 
 -- Triggers for updated_at (drop if exists first)
 DROP TRIGGER IF EXISTS update_users_updated_at ON users;
@@ -104,4 +154,12 @@ CREATE TRIGGER update_portfolios_updated_at BEFORE UPDATE ON portfolios
 
 DROP TRIGGER IF EXISTS update_watchlists_updated_at ON watchlists;
 CREATE TRIGGER update_watchlists_updated_at BEFORE UPDATE ON watchlists
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_paper_portfolios_updated_at ON paper_portfolios;
+CREATE TRIGGER update_paper_portfolios_updated_at BEFORE UPDATE ON paper_portfolios
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_paper_holdings_updated_at ON paper_holdings;
+CREATE TRIGGER update_paper_holdings_updated_at BEFORE UPDATE ON paper_holdings
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
