@@ -65,9 +65,43 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Triggers for updated_at
+-- Portfolios table
+CREATE TABLE IF NOT EXISTS portfolios (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  holdings JSONB DEFAULT '[]',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id)
+);
+
+-- Watchlists table
+CREATE TABLE IF NOT EXISTS watchlists (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  items JSONB DEFAULT '[]',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(user_id)
+);
+
+-- Indexes for new tables
+CREATE INDEX IF NOT EXISTS idx_portfolios_user_id ON portfolios(user_id);
+CREATE INDEX IF NOT EXISTS idx_watchlists_user_id ON watchlists(user_id);
+
+-- Triggers for updated_at (drop if exists first)
+DROP TRIGGER IF EXISTS update_users_updated_at ON users;
 CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_hacd_launch_specs_updated_at ON hacd_launch_specs;
 CREATE TRIGGER update_hacd_launch_specs_updated_at BEFORE UPDATE ON hacd_launch_specs
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_portfolios_updated_at ON portfolios;
+CREATE TRIGGER update_portfolios_updated_at BEFORE UPDATE ON portfolios
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS update_watchlists_updated_at ON watchlists;
+CREATE TRIGGER update_watchlists_updated_at BEFORE UPDATE ON watchlists
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
