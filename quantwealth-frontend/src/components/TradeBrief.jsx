@@ -134,7 +134,7 @@ export default function TradeBrief() {
     setResult(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${API_URL}/trade-brief`, {
+      const res = await fetch(`${API_URL}/api/trade-brief`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

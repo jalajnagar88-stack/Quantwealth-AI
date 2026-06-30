@@ -108,7 +108,7 @@ function SignalsList() {
     try {
       const token = localStorage.getItem('token');
       const tech  = mockTechnicals(symbol);
-      const res   = await fetch(`${API_URL}/signals/generate`, {
+      const res   = await fetch(`${API_URL}/api/signals/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({
