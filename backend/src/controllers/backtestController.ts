@@ -25,8 +25,8 @@ export const runBacktest = async (req: Request, res: Response) => {
       });
     }
 
-    // Convert userId (number from PostgreSQL) to ObjectId for MongoDB
-    const userIdObjectId = new mongoose.Types.ObjectId(String(userId));
+    // Convert userId (number from PostgreSQL) to string for MongoDB
+    const userIdStr = String(userId);
 
     const { symbol, stockName, strategy, years, initialCapital } = req.body;
 
@@ -55,7 +55,7 @@ export const runBacktest = async (req: Request, res: Response) => {
 
     // Save to database
     const backtest = new Backtest({
-      userId: userIdObjectId,
+      userId: userIdStr,
       symbol: symbol.toUpperCase(),
       stockName: stockName || symbol,
       strategy,
@@ -118,13 +118,13 @@ export const getBacktestHistory = async (req: Request, res: Response) => {
       });
     }
 
-    // Convert userId (number from PostgreSQL) to ObjectId for MongoDB
-    const userIdObjectId = new mongoose.Types.ObjectId(String(userId));
+    // Convert userId (number from PostgreSQL) to string for MongoDB
+    const userIdStr = String(userId);
 
     const { limit = 20, page = 1, symbol, strategy } = req.query;
 
     // Build query
-    const query: any = { userId: userIdObjectId };
+    const query: any = { userId: userIdStr };
     if (symbol) query.symbol = symbol.toString().toUpperCase();
     if (strategy) query.strategy = strategy;
 
@@ -171,14 +171,14 @@ export const getBacktestDetails = async (req: Request, res: Response) => {
       });
     }
 
-    // Convert userId (number from PostgreSQL) to ObjectId for MongoDB
-    const userIdObjectId = new mongoose.Types.ObjectId(String(userId));
+    // Convert userId (number from PostgreSQL) to string for MongoDB
+    const userIdStr = String(userId);
 
     const { id } = req.params;
 
     const backtest = await Backtest.findOne({
       _id: id,
-      userId: userIdObjectId
+      userId: userIdStr
     });
 
     if (!backtest) {
@@ -213,14 +213,14 @@ export const deleteBacktest = async (req: Request, res: Response) => {
       });
     }
 
-    // Convert userId (number from PostgreSQL) to ObjectId for MongoDB
-    const userIdObjectId = new mongoose.Types.ObjectId(String(userId));
+    // Convert userId (number from PostgreSQL) to string for MongoDB
+    const userIdStr = String(userId);
 
     const { id } = req.params;
 
     const backtest = await Backtest.findOneAndDelete({
       _id: id,
-      userId: userIdObjectId
+      userId: userIdStr
     });
 
     if (!backtest) {
@@ -255,11 +255,11 @@ export const getBacktestStats = async (req: Request, res: Response) => {
       });
     }
 
-    // Convert userId (number from PostgreSQL) to ObjectId for MongoDB
-    const userIdObjectId = new mongoose.Types.ObjectId(String(userId));
+    // Convert userId (number from PostgreSQL) to string for MongoDB
+    const userIdStr = String(userId);
 
     const stats = await Backtest.aggregate([
-      { $match: { userId: userIdObjectId } },
+      { $match: { userId: userIdStr } },
       {
         $group: {
           _id: null,
@@ -275,7 +275,7 @@ export const getBacktestStats = async (req: Request, res: Response) => {
 
     // Get strategy breakdown
     const strategyStats = await Backtest.aggregate([
-      { $match: { userId: userIdObjectId } },
+      { $match: { userId: userIdStr } },
       {
         $group: {
           _id: '$strategy',

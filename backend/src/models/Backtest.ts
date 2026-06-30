@@ -46,8 +46,7 @@ const TradeSchema: Schema = new Schema({
 
 const BacktestSchema: Schema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true,
     index: true
   },
